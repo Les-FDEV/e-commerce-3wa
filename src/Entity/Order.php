@@ -20,14 +20,14 @@ class Order
     private ?\DateTimeImmutable $created_at = null;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $comfirmed_at = null;
+    private ?\DateTimeImmutable $confirmed_at = null;
 
     #[ORM\Column(length: 255)]
     private ?string $statut = null;
 
     #[ORM\ManyToOne(inversedBy: 'orders')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Customer $customer = null;
+    private ?User $user = null;
 
     #[ORM\OneToMany(mappedBy: 'orderReference', targetEntity: OrderProducts::class, orphanRemoval: true)]
     private Collection $orderProducts;
@@ -61,14 +61,14 @@ class Order
         return $this;
     }
 
-    public function getComfirmedAt(): ?\DateTimeImmutable
+    public function getConfirmedAt(): ?\DateTimeImmutable
     {
-        return $this->comfirmed_at;
+        return $this->confirmed_at;
     }
 
-    public function setComfirmedAt(\DateTimeImmutable $comfirmed_at): self
+    public function setConfirmedAt(\DateTimeImmutable $confirmed_at): self
     {
-        $this->comfirmed_at = $comfirmed_at;
+        $this->confirmed_at = $confirmed_at;
 
         return $this;
     }
@@ -85,14 +85,14 @@ class Order
         return $this;
     }
 
-    public function getCustomer(): ?Customer
+    public function getUser(): ?User
     {
-        return $this->customer;
+        return $this->user;
     }
 
-    public function setCustomer(?Customer $customer): self
+    public function setUser(?User $user): self
     {
-        $this->customer = $customer;
+        $this->user = $user;
 
         return $this;
     }

@@ -18,7 +18,7 @@ class Address
 
     #[ORM\ManyToOne(inversedBy: 'addresses')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Customer $customer = null;
+    private ?User $user = null;
 
     #[ORM\Column(length: 255)]
     private ?string $country = null;
@@ -49,14 +49,14 @@ class Address
         return $this;
     }
 
-    public function getCustomer(): ?Customer
+    public function getUser(): ?User
     {
-        return $this->customer;
+        return $this->user;
     }
 
-    public function setCustomer(?Customer $customer): self
+    public function setUser(?User $user): self
     {
-        $this->customer = $customer;
+        $this->user = $user;
 
         return $this;
     }
