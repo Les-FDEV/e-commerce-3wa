@@ -22,6 +22,10 @@ class OrderProducts
     #[ORM\Column]
     private ?int $total = null;
 
+    #[ORM\ManyToOne(inversedBy: 'orderProducts')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Order $orderReference = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -59,6 +63,18 @@ class OrderProducts
     public function setTotal(int $total): self
     {
         $this->total = $total;
+
+        return $this;
+    }
+
+    public function getOrderReference(): ?Order
+    {
+        return $this->orderReference;
+    }
+
+    public function setOrderReference(?Order $orderReference): self
+    {
+        $this->orderReference = $orderReference;
 
         return $this;
     }

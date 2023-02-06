@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\OrderRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: OrderRepository::class)]
@@ -26,6 +28,21 @@ class Order
     #[ORM\ManyToOne(inversedBy: 'orders')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Customer $customer = null;
+
+    #[ORM\OneToMany(mappedBy: 'orderReference', targetEntity: OrderProducts::class, orphanRemoval: true)]
+    private Collection $orderProducts;
+
+    #[ORM\OneToOne(mappedBy: 'orderReference', cascade: ['persist', 'remove'])]
+    private ?Payment $payment = null;
+
+    #[ORM\ManyToOne(inversedBy: 'orderReference')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Shipping $shipping = null;
+
+    public function __construct()
+    {
+        $this->orderProducts = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -76,6 +93,65 @@ class Order
     public function setCustomer(?Customer $customer): self
     {
         $this->customer = $customer;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, OrderProducts>
+     */
+    public function getOrderProducts(): Collection
+    {
+        return $this->orderProducts;
+    }
+
+    public function addOrderProduct(OrderProducts $orderProduct): self
+    {
+        if (!$this->orderProducts->contains($orderProduct)) {
+            $this->orderProducts->add($orderProduct);
+            $orderProduct->setOrderReference($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOrderProduct(OrderProducts $orderProduct): self
+    {
+        if ($this->orderProducts->removeElement($orderProduct)) {
+            // set the owning side to null (unless already changed)
+            if ($orderProduct->getOrderReference() === $this) {
+                $orderProduct->setOrderReference(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getPayment(): ?Payment
+    {
+        return $this->payment;
+    }
+
+    public function setPayment(Payment $payment): self
+    {
+        // set the owning side of the relation if necessary
+        if ($payment->getOrderReference() !== $this) {
+            $payment->setOrderReference($this);
+        }
+
+        $this->payment = $payment;
+
+        return $this;
+    }
+
+    public function getShipping(): ?Shipping
+    {
+        return $this->shipping;
+    }
+
+    public function setShipping(?Shipping $shipping): self
+    {
+        $this->shipping = $shipping;
 
         return $this;
     }
