@@ -1,0 +1,42 @@
+@import 'vars';
+body{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Roboto', sans-serif;
+}
+
+.top-nav{
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  background-color: $color1;
+  padding: 10px 0px;
+  i{
+    color: $color2;
+    margin-right: 2px;
+    &:nth-child(1){
+      font-size: 14px;
+    }
+  }
+  .adress{
+    a{
+      text-decoration: none;
+      color: white;
+      margin-left: 10px;
+    }
+  }
+  .account{
+    a{
+      text-decoration: none;
+      color: white;
+    }
+
+  }
+}
+
+.search-bar{
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
