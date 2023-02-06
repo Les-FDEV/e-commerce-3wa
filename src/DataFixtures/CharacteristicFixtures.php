@@ -2,25 +2,25 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\Caracteristic;
+use App\Entity\Characteristic;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Faker;
 
-class CaracteristicFixtures extends Fixture
+class CharacteristicFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
         $faker = Faker\Factory::create('fr_FR');
 
         for($i = 0; $i < 30; $i++){
-            $caracteristic = new Caracteristic;
-            $caracteristic->setColor($faker->colorName)
+            $characteristic = new Characteristic;
+            $characteristic->setColor($faker->colorName)
                 ->setMemory($faker->numberBetween(16, 1024))
-                ->setWeight($faker->randomFloat(10))
+                ->setWeight($faker->randomFloat(2))
             ;
-            $manager->persist($caracteristic);
-            $this->addReference('caracteristic'.$i, $caracteristic);
+            $manager->persist($characteristic);
+            $this->addReference('characteristic'.$i, $characteristic);
         }
 
         $manager->flush();
