@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ProductRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
@@ -19,12 +21,17 @@ class Product
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $description = null;
 
-    #[ORM\ManyToOne(inversedBy: 'product')]
-    private ?CategoriesProduct $categoriesProduct = null;
+    #[ORM\OneToMany(mappedBy: 'product', targetEntity: CategoriesProduct::class)]
+    private Collection $categoriesProduct;
 
-    #[ORM\ManyToOne(inversedBy: 'product')]
-    private ?CaracteristicProduct $caracteristicProduct = null;
+    #[ORM\OneToMany(mappedBy: 'product', targetEntity: CharacteristicProduct::class)]
+    private Collection $characteristicProducts;
 
+    public function __construct()
+    {
+        $this->categoriesProduct = new ArrayCollection();
+        $this->characteristicProducts = new ArrayCollection();
+    }
     public function getId(): ?int
     {
         return $this->id;
@@ -54,26 +61,62 @@ class Product
         return $this;
     }
 
-    public function getCategoriesProduct(): ?CategoriesProduct
+    /**
+     * @return Collection<int, CharacteristicProduct>
+     */
+    public function getCharacteristicProducts(): Collection
     {
-        return $this->categoriesProduct;
+        return $this->characteristicProducts;
     }
 
-    public function setCategoriesProduct(?CategoriesProduct $categoriesProduct): self
+    public function addCharacteristicProduct(CharacteristicProduct $characteristicProduct): self
     {
-        $this->categoriesProduct = $categoriesProduct;
+        if (!$this->characteristicProducts->contains($characteristicProduct)) {
+            $this->characteristicProducts->add($characteristicProduct);
+            $characteristicProduct->setProduct($this);
+        }
 
         return $this;
     }
 
-    public function getCaracteristicProduct(): ?CaracteristicProduct
+    public function removeCharacteristicProduct(CharacteristicProduct $characteristicProduct): self
     {
-        return $this->caracteristicProduct;
+        if ($this->characteristicProducts->removeElement($characteristicProduct)) {
+            // set the owning side to null (unless already changed)
+            if ($characteristicProduct->getProduct() === $this) {
+                $characteristicProduct->setProduct(null);
+            }
+        }
+
+        return $this;
     }
 
-    public function setCaracteristicProduct(?CaracteristicProduct $caracteristicProduct): self
+    /**
+     * @return Collection<int, CategoriesProduct>
+     */
+    public function getCategoriesProducts(): Collection
     {
-        $this->caracteristicProduct = $caracteristicProduct;
+        return $this->categoriesProduct;
+    }
+
+    public function addCategoryProduct(CategoriesProduct $categoryProduct): self
+    {
+        if (!$this->categoriesProduct->contains($categoryProduct)) {
+            $this->categoriesProduct->add($categoryProduct);
+            $categoryProduct->setProduct($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCategoryProduct(CategoriesProduct $categoryProduct): self
+    {
+        if ($this->categoriesProduct->removeElement($categoryProduct)) {
+            // set the owning side to null (unless already changed)
+            if ($categoryProduct->getProduct() === $this) {
+                $categoryProduct->setProduct(null);
+            }
+        }
 
         return $this;
     }
