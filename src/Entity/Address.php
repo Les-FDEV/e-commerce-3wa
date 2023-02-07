@@ -16,10 +16,6 @@ class Address
     #[ORM\Column(length: 255)]
     private ?string $type = null;
 
-    #[ORM\ManyToOne(inversedBy: 'addresses')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?User $user = null;
-
     #[ORM\Column(length: 255)]
     private ?string $country = null;
 
@@ -31,6 +27,9 @@ class Address
 
     #[ORM\Column(length: 255)]
     private ?string $number = null;
+
+    #[ORM\ManyToOne(inversedBy: 'addresses')]
+    private ?User $user = null;
 
     public function getId(): ?int
     {
@@ -45,18 +44,6 @@ class Address
     public function setType(string $type): self
     {
         $this->type = $type;
-
-        return $this;
-    }
-
-    public function getUser(): ?User
-    {
-        return $this->user;
-    }
-
-    public function setUser(?User $user): self
-    {
-        $this->user = $user;
 
         return $this;
     }
@@ -105,6 +92,18 @@ class Address
     public function setNumber(string $number): self
     {
         $this->number = $number;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
 
         return $this;
     }
