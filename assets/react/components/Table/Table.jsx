@@ -3,16 +3,18 @@ import ProductAPI from "../../services/ProductAPI";
 
 function Table({data}) {
 
+    //create an array row with the keys of the first object of the data array
+
+    const row = Object.keys(data).map((key, index) => (
+            console.log(key)
+        ))
+    ;
 
     return (
         <table className="table">
             <thead>
             <tr>
-                <th scope="col">#</th>
-                <th scope="col">Catégories</th>
-                <th scope="col">Produits</th>
-                <th scope="col">Stock</th>
-                <th scope="col">Action</th>
+                {row}
             </tr>
             </thead>
             <tbody>
