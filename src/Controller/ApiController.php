@@ -63,10 +63,10 @@ class ApiController extends AbstractController
     {
         $products = $this->productRepository->findAll();
         $allProducts = [];
-        $allCategories = [];
-        $allCharacteristics = [];
         foreach ($products as $product){
             $categoriesProduct = $product->getCategoriesProducts();
+            $allCategories = [];
+            $allCharacteristics = [];
             foreach ($categoriesProduct as $categoryProduct){
                 $category = $categoryProduct->getCategory();
                 $allCategories[] = [
@@ -103,8 +103,8 @@ class ApiController extends AbstractController
     {
         $users = $this->userRepository->findAll();
         $allUsers = [];
-        $allAddresses = [];
         foreach ($users as $user){
+            $allAddresses = [];
             $addresses = $user->getAddresses();
             foreach ($addresses as $address){
                 $allAddresses[] = [
