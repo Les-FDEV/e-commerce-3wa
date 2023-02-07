@@ -5,9 +5,11 @@ import {
     useElements
 } from "@stripe/react-stripe-js";
 
-export default function CheckoutForm() {
+export default function CheckoutForm( props ) {
     const stripe = useStripe();
     const elements = useElements();
+
+    console.log(elements)
 
     const [message, setMessage] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
