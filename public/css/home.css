@@ -4,6 +4,8 @@ body {
   padding: 0;
   box-sizing: border-box;
   font-family: "Roboto", sans-serif;
+  width: 100vw;
+  height: 100vh;
 }
 
 .top-nav {
@@ -20,6 +22,9 @@ body {
 .top-nav i:nth-child(1) {
   font-size: 14px;
 }
+.top-nav span {
+  color: #D11F25;
+}
 .top-nav .adress a {
   text-decoration: none;
   color: white;
@@ -31,9 +36,128 @@ body {
 }
 
 .search-bar {
+  background-color: #15161C;
+  border-bottom: 3px solid #D11F25;
+}
+.search-bar h1 {
+  color: white;
+  font-size: 49px;
+  margin: 18px;
+}
+.search-bar h1 span {
+  color: #D11F25;
+}
+.search-bar .middle {
   display: flex;
   align-items: center;
   justify-content: space-around;
+  width: 76%;
+  margin: 0 auto;
+}
+.search-bar .title {
+  width: 20%;
+  display: flex;
+  justify-content: center;
+}
+.search-bar .searchBar {
+  display: flex;
+  width: 60%;
+  display: flex;
+  justify-content: center;
+}
+.search-bar .searchBar input {
+  padding: 9px 15px;
+  border: none;
+  outline: none;
+}
+.search-bar .searchBar button {
+  position: relative;
+  left: -6px;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+  width: 60px;
+  height: 100%;
+  margin: 0;
+  border: 1px solid #D11F25;
+  background-color: #D11F25;
+  cursor: pointer;
+}
+.search-bar .searchBar button i {
+  color: white;
+  transform: scale(1.3);
+}
+.search-bar .searchBar button:hover > i {
+  color: #1D202B;
+}
+.search-bar .searchBar #categ-select {
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+  outline: none;
+  border-top: none;
+  border-bottom: none;
+  border-left: none;
+  cursor: pointer;
+}
+.search-bar .searchBar #categ-select option {
+  font-weight: 600;
+}
+.search-bar .panier {
+  width: 20%;
+  display: flex;
+  justify-content: center;
+}
+.search-bar .panier i {
+  color: white;
+  font-size: 24px;
+}
+
+nav {
+  padding: 15px 2px;
+  margin: 0 auto;
+  border-bottom: 3px solid rgba(192, 192, 192, 0.7);
+}
+nav ul {
+  list-style: none;
+  display: flex;
+  margin: 0;
+  width: 68%;
+  margin: 0 auto;
+  padding: 0;
+}
+nav ul li {
+  margin-right: 20px;
+}
+nav ul li a {
+  text-decoration: none;
+  font-weight: bold;
+  color: #15161C;
+}
+nav ul li a:hover {
+  color: #D11F25;
+  border-bottom: 2px solid #D11F25;
+}
+
+.container {
+  width: 68%;
+  margin: 0 auto;
+}
+.container .newProduct h2 {
+  margin-top: 50px;
+}
+.container .newProduct .lastest {
+  display: flex;
+  justify-content: space-between;
+}
+.container .newProduct .lastest .product {
+  border: 2px solid rgba(192, 192, 192, 0.7);
+  height: 150px;
+  padding: 2%;
+  width: 15%;
+  text-align: center;
+}
+.container .newProduct .lastest .product a {
+  text-decoration: none;
+  color: #D11F25;
 }
 
 /*# sourceMappingURL=home.css.map */
