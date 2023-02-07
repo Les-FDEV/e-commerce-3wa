@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Repository\CategoryRepository;
 use App\Repository\CharacteristicRepository;
 use App\Repository\ProductRepository;
+use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -15,7 +16,8 @@ class ApiController extends AbstractController
     public function __construct(
         private readonly CategoryRepository $categoryRepository,
         private readonly CharacteristicRepository $characteristicRepository,
-        private readonly ProductRepository $productRepository
+        private readonly ProductRepository $productRepository,
+        private readonly UserRepository $userRepository
     ){}
     #[Route('/categories', name: 'api_categories')]
     public function getCategories(): Response
@@ -94,6 +96,43 @@ class ApiController extends AbstractController
         $response->headers->set('Content-Type', 'application/json');
         $response->headers->set('Access-Control-Allow-Origin', '*');
         $response->setContent(json_encode($allProducts));
+        return $response;
+    }
+    #[Route('/users', name: 'api_users')]
+    public function getUsers(): Response
+    {
+        $users = $this->userRepository->findAll();
+        $allUsers = [];
+        $allAddresses = [];
+        foreach ($users as $user){
+            $addresses = $user->getAddresses();
+            foreach ($addresses as $address){
+                $allAddresses[] = [
+                    'id' => $address->getId(),
+                    'country' => $address->getCountry(),
+                    'city' => $address->getCity(),
+                    'number' => $address->getNumber(),
+                    'street' => $address->getStreet(),
+                    'type' => $address->getType()
+                ];
+            }
+            $allUsers[] = [
+                'id' => $user->getId(),
+                'firstName' => $user->getFirstname(),
+                'lastName' => $user->getLastname(),
+                'email' => $user->getEmail(),
+                'userIdentifier' => $user->getUserIdentifier(),
+                'password' => $user->getPassword(),
+                'phone' => $user->getPhoneNumber(),
+                'roles' => $user->getRoles(),
+                'addresses' => $allAddresses
+            ];
+        }
+
+        $response = new Response();
+        $response->headers->set('Content-Type', 'application/json');
+        $response->headers->set('Access-Control-Allow-Origin', '*');
+        $response->setContent(json_encode($allUsers));
         return $response;
     }
 }
