@@ -14,7 +14,9 @@ class HomeController extends AbstractController
     public function index(ProductRepository $productRepository, CategoryRepository $categoryRepository): Response
     {
         $products = $productRepository->findBy(array(),array('id' => 'DESC'),5 );
+
         $categs = $categoryRepository->findAll();
+
         return $this->render('home/index.html.twig', [
             'controller_name' => 'HomeController',
             'product' => $products,
@@ -22,11 +24,13 @@ class HomeController extends AbstractController
         ]);
     }
     #[Route('/product/{id}', name: 'oneProduct')]
-    public function productSheet($id,ProductRepository $productRepository): Response
+    public function productSheet($id,ProductRepository $productRepository, CategoryRepository $categoryRepository): Response
     {
+        $categs = $categoryRepository->findAll();
         return $this->render('productSheet/index.html.twig', [
             'controller_name' => 'HomeController',
-            'oneProduct' =>  $productRepository->find($id)
+            'oneProduct' =>  $productRepository->find($id),
+            'categs' => $categs
         ]);
     }
 }
