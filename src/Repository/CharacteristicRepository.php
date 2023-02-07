@@ -2,26 +2,26 @@
 
 namespace App\Repository;
 
-use App\Entity\Caracteristic;
+use App\Entity\Characteristic;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<Caracteristic>
+ * @extends ServiceEntityRepository<Characteristic>
  *
- * @method Caracteristic|null find($id, $lockMode = null, $lockVersion = null)
- * @method Caracteristic|null findOneBy(array $criteria, array $orderBy = null)
- * @method Caracteristic[]    findAll()
- * @method Caracteristic[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method Characteristic|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Characteristic|null findOneBy(array $criteria, array $orderBy = null)
+ * @method Characteristic[]    findAll()
+ * @method Characteristic[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class CaracteristicRepository extends ServiceEntityRepository
+class CharacteristicRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Caracteristic::class);
+        parent::__construct($registry, Characteristic::class);
     }
 
-    public function save(Caracteristic $entity, bool $flush = false): void
+    public function save(Characteristic $entity, bool $flush = false): void
     {
         $this->getEntityManager()->persist($entity);
 
@@ -30,7 +30,7 @@ class CaracteristicRepository extends ServiceEntityRepository
         }
     }
 
-    public function remove(Caracteristic $entity, bool $flush = false): void
+    public function remove(Characteristic $entity, bool $flush = false): void
     {
         $this->getEntityManager()->remove($entity);
 
@@ -40,7 +40,7 @@ class CaracteristicRepository extends ServiceEntityRepository
     }
 
 //    /**
-//     * @return Caracteristic[] Returns an array of Caracteristic objects
+//     * @return Characteristic[] Returns an array of Characteristic objects
 //     */
 //    public function findByExampleField($value): array
 //    {
@@ -54,7 +54,7 @@ class CaracteristicRepository extends ServiceEntityRepository
 //        ;
 //    }
 
-//    public function findOneBySomeField($value): ?Caracteristic
+//    public function findOneBySomeField($value): ?Characteristic
 //    {
 //        return $this->createQueryBuilder('c')
 //            ->andWhere('c.exampleField = :val')

@@ -2,26 +2,26 @@
 
 namespace App\Repository;
 
-use App\Entity\CaracteristicProduct;
+use App\Entity\CharacteristicProduct;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<CaracteristicProduct>
+ * @extends ServiceEntityRepository<CharacteristicProduct>
  *
- * @method CaracteristicProduct|null find($id, $lockMode = null, $lockVersion = null)
- * @method CaracteristicProduct|null findOneBy(array $criteria, array $orderBy = null)
- * @method CaracteristicProduct[]    findAll()
- * @method CaracteristicProduct[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method CharacteristicProduct|null find($id, $lockMode = null, $lockVersion = null)
+ * @method CharacteristicProduct|null findOneBy(array $criteria, array $orderBy = null)
+ * @method CharacteristicProduct[]    findAll()
+ * @method CharacteristicProduct[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class CaracteristicProductRepository extends ServiceEntityRepository
+class CharacteristicProductRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, CaracteristicProduct::class);
+        parent::__construct($registry, CharacteristicProduct::class);
     }
 
-    public function save(CaracteristicProduct $entity, bool $flush = false): void
+    public function save(CharacteristicProduct $entity, bool $flush = false): void
     {
         $this->getEntityManager()->persist($entity);
 
@@ -30,7 +30,7 @@ class CaracteristicProductRepository extends ServiceEntityRepository
         }
     }
 
-    public function remove(CaracteristicProduct $entity, bool $flush = false): void
+    public function remove(CharacteristicProduct $entity, bool $flush = false): void
     {
         $this->getEntityManager()->remove($entity);
 
@@ -40,7 +40,7 @@ class CaracteristicProductRepository extends ServiceEntityRepository
     }
 
 //    /**
-//     * @return CaracteristicProduct[] Returns an array of CaracteristicProduct objects
+//     * @return CharacteristicProduct[] Returns an array of CharacteristicProduct objects
 //     */
 //    public function findByExampleField($value): array
 //    {
@@ -54,7 +54,7 @@ class CaracteristicProductRepository extends ServiceEntityRepository
 //        ;
 //    }
 
-//    public function findOneBySomeField($value): ?CaracteristicProduct
+//    public function findOneBySomeField($value): ?CharacteristicProduct
 //    {
 //        return $this->createQueryBuilder('c')
 //            ->andWhere('c.exampleField = :val')
