@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Fiche produit{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/product.css') }}">
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="oneProduct">
+            <h1>{{ oneProduct.name }}</h1>
+            <p>{{ oneProduct.description }}</p>
+        </div>
+    </div>
+{% endblock %}
