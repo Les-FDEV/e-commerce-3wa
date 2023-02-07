@@ -17,12 +17,12 @@ class CategoryProductFixtures extends Fixture implements DependentFixtureInterfa
         for($i = 0; $i < 30; $i++){
             $categoryProduct = new CategoriesProduct;
             $product = $this->getReference('product'.$i);
-            for($j = 0; $j < $faker->numberBetween(0,3); $j++){
+            for($j = 0; $j < $faker->numberBetween(1,4); $j++){
                 $category = $this->getReference('category'.$faker->numberBetween(0,9));
                 $categoryProduct->setCategory($category);
+                $categoryProduct->setProduct($product);
+                $manager->persist($categoryProduct);
             }
-            $categoryProduct->setProduct($product);
-            $manager->persist($categoryProduct);
         }
 
         $manager->flush();
