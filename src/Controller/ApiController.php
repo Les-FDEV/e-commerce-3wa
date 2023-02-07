@@ -67,12 +67,19 @@ class ApiController extends AbstractController
             $categoriesProduct = $product->getCategoriesProducts();
             foreach ($categoriesProduct as $categoryProduct){
                 $category = $categoryProduct->getCategory();
-                $allCategories[] = $category->getId();
+                $allCategories[] = [
+                    'name' => $category->getName(),
+                    'id' => $category->getId()
+                ];
             }
             $characteristicsProduct = $product->getCharacteristicProducts();
             foreach ($characteristicsProduct as $characteristicProduct){
                 $characteristic = $characteristicProduct->getCharacteristic();
-                $allCharacteristics[] = $characteristic->getId();
+                $allCharacteristics[] = [
+                    'id' => $characteristic->getId(),
+                    'price' => $characteristicProduct->getPrice(),
+                    'stock' => $characteristicProduct->getStock()
+                ];
             }
             $allProducts[] = [
                 'id' => $product->getId(),
