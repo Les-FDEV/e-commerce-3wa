@@ -13,10 +13,10 @@ class CategoriesProduct
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'characteristicProducts')]
+    #[ORM\ManyToOne(inversedBy: 'categoriesProduct')]
     private ?Product $product = null;
 
-    #[ORM\ManyToOne(inversedBy: 'characteristicProducts')]
+    #[ORM\ManyToOne(inversedBy: 'categoriesProduct')]
     private ?Category $category = null;
 
     public function getId(): ?int
