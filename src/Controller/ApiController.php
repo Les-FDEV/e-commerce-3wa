@@ -66,7 +66,6 @@ class ApiController extends AbstractController
         foreach ($products as $product){
             $categoriesProduct = $product->getCategoriesProducts();
             $allCategories = [];
-            $allCharacteristics = [];
             foreach ($categoriesProduct as $categoryProduct){
                 $category = $categoryProduct->getCategory();
                 $allCategories[] = [
@@ -75,6 +74,7 @@ class ApiController extends AbstractController
                 ];
             }
             $characteristicsProduct = $product->getCharacteristicProducts();
+            $allCharacteristics = [];
             foreach ($characteristicsProduct as $characteristicProduct){
                 $characteristic = $characteristicProduct->getCharacteristic();
                 $allCharacteristics[] = [
