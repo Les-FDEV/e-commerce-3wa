@@ -13,14 +13,13 @@ class CharacteristicFixtures extends Fixture
     {
         $faker = Faker\Factory::create('fr_FR');
 
-        for($i = 0; $i < 30; $i++){
+        for ($i = 0; $i < 30; $i++) {
             $characteristic = new Characteristic;
             $characteristic->setColor($faker->colorName)
                 ->setMemory($faker->numberBetween(16, 1024))
-                ->setWeight($faker->randomFloat(2))
-            ;
+                ->setWeight($faker->randomFloat(2));
             $manager->persist($characteristic);
-            $this->addReference('characteristic'.$i, $characteristic);
+            $this->addReference('characteristic' . $i, $characteristic);
         }
 
         $manager->flush();

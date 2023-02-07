@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\OrderRepository;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -17,10 +18,10 @@ class Order
     private ?int $id = null;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $created_at = null;
+    private ?\DateTime $created_at = null;
 
-    #[ORM\Column]
-    private ?\DateTimeImmutable $confirmed_at = null;
+    #[ORM\Column(type: 'datetime', nullable: true)]
+    private ?\DateTime $confirmed_at = null;
 
     #[ORM\Column(length: 255)]
     private ?string $statut = null;
@@ -36,7 +37,7 @@ class Order
     private ?Payment $payment = null;
 
     #[ORM\ManyToOne(inversedBy: 'orderReference')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     private ?Shipping $shipping = null;
 
     public function __construct()
@@ -49,24 +50,24 @@ class Order
         return $this->id;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getCreatedAt(): ?DateTime
     {
         return $this->created_at;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $created_at): self
+    public function setCreatedAt(DateTime $created_at): self
     {
         $this->created_at = $created_at;
 
         return $this;
     }
 
-    public function getConfirmedAt(): ?\DateTimeImmutable
+    public function getConfirmedAt(): ?DateTime
     {
         return $this->confirmed_at;
     }
 
-    public function setConfirmedAt(\DateTimeImmutable $confirmed_at): self
+    public function setConfirmedAt(DateTime $confirmed_at): self
     {
         $this->confirmed_at = $confirmed_at;
 
