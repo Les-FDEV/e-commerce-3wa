@@ -1,0 +1,57 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{% endblock %}
+
+{% block body %}
+
+
+
+{% endblock %}
+
+{% block javascripts %}
+
+    <script>
+
+        import React, {useEffect, useState} from 'react';
+        import axios from 'axios';
+
+        function Table(props) {
+            const [products, setProducts] = useState([]);
+
+            const getProducts = async () => {
+                try {
+                    const data = await axios.get('/api/products')
+                    setProducts(data)
+                } catch (error) {
+                    console.error(error)
+                }
+            }
+
+            useEffect(() => {
+                getProducts();
+            }, []);
+
+            useEffect(() => {
+                console.log(products)
+            }, [products]);
+
+            return (
+                <table className="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Catégories</th>
+                        <th scope="col">Produits</th>
+                        <th scope="col">Stock</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+            );
+        }
+    </script>
+
+{% endblock %}
