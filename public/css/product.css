@@ -1,6 +1,19 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
 .oneProduct h1 {
   text-align: center;
   margin-top: 100px;
+  font-size: 52px;
+  position: relative;
+  margin-bottom: 75px;
+}
+.oneProduct h1::after {
+  position: absolute;
+  content: "";
+  width: 66px;
+  height: 5px;
+  background-color: #D11F25;
+  bottom: -14px;
+  left: 47.2%;
 }
 .oneProduct p {
   width: 50%;

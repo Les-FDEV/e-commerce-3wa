@@ -21,6 +21,9 @@ body{
       font-size: 14px;
     }
   }
+  span{
+    color: $color2;
+  }
   .adress{
     a{
       text-decoration: none;
@@ -83,10 +86,14 @@ body{
       border: 1px solid $color2;
       background-color: $color2;
       cursor: pointer;
+
       i{
         color: white;
         transform: scale(1.3);
       }
+    }
+    button:hover > i{
+      color: $color1;
     }
     #categ-select{
       border-top-left-radius: 5px;
@@ -156,6 +163,10 @@ nav{
         padding: 2%;
         width: 15%;
         text-align: center;
+        a{
+          text-decoration: none;
+          color: $color2;
+        }
       }
     }
   }

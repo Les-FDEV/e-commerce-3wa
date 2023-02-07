@@ -1,0 +1,63 @@
+@import 'vars';
+
+.title_login{
+text-align: center;
+  font-size: 50px;
+  position: relative;
+  text-transform: uppercase;
+  &::after{
+    position: absolute;
+    content: "";
+    width: 66px;
+    height: 5px;
+    background-color: #D11F25;
+    bottom: -14px;
+    left: 47.2%;
+  }
+}
+.title_register{
+  text-align: center;
+  font-size: 50px;
+  position: relative;
+  text-transform: uppercase;
+  &::after{
+    position: absolute;
+    content: "";
+    width: 66px;
+    height: 5px;
+    background-color: #D11F25;
+    bottom: -14px;
+    left: 48.2%;
+  }
+}
+form{
+  display: flex;
+  flex-direction: column;
+  width: 30%;
+  margin: 0 auto;
+  input{
+    margin-bottom: 25px;
+    height: 25px;
+  }
+  button{
+    border-radius: 5px;
+    outline: none;
+    background-color: $color1;
+    border: 2px solid $color1;
+    color: white;
+    text-transform: uppercase;
+    font-size: 16px;
+    font-weight: bold;
+    width: 40%;
+    padding: 6px 5px;
+    margin: 0 auto;
+    cursor: pointer;
+    &:hover{
+      background-color: $color2;
+    }
+  }
+  .mb-3{
+    display: flex;
+    flex-direction: column;
+  }
+}
