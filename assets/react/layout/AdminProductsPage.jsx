@@ -7,7 +7,7 @@ import AdminForm from "../components/Form/AdminForm";
 import CategoryAPI from "../services/CategoryAPI";
 import ButtonModal from "../components/Modal/ButtonModal";
 
-function AdminProductsPage(props) {
+function AdminProductsPage() {
     const [products, setProducts] = useState([]);
     const [product, setProduct] = useState({});
     const [categories, setCategories] = useState([]);
@@ -39,7 +39,7 @@ function AdminProductsPage(props) {
                             )
                         },
                         {value: product.name},
-                        {value: product.characteristics[0].stock},
+                        {value: product?.characteristicProducts[0]?.stock ?? "Non renseigné"},
                         {
                             value: (
                                 <>
@@ -121,61 +121,61 @@ function AdminProductsPage(props) {
 
     // Le code pour préparer le formulaire de création/édition de produit
 
-    // const productFields = [
-    //     {
-    //         id: 1,
-    //         name: 'name',
-    //         label: 'Nom du produit',
-    //         type: 'text',
-    //         placeholder: 'Nom du produit',
-    //         value: product.name ?? '',
-    //     },
-    //     {
-    //         id: 2,
-    //         name: 'description',
-    //         label: 'Description',
-    //         type: 'textarea',
-    //         placeholder: 'Description du produit',
-    //         value: product.description ?? '',
-    //     },
-    //     {
-    //         id: 3,
-    //         name: 'price',
-    //         label: 'Prix',
-    //         type: 'number',
-    //         value: product.price ?? '',
-    //     },
-    //     {
-    //         id: 4,
-    //         name: 'stock',
-    //         label: 'Stock',
-    //         type: 'number',
-    //         value: product.stock ?? '',
-    //     },
-    //     {
-    //         id: 4,
-    //         name: 'color',
-    //         label: 'Couleur',
-    //         type: 'text',
-    //         placeholder: 'Couleur du produit',
-    //         value: product.color ?? '',
-    //     },
-    //     {
-    //         id: 5,
-    //         name: 'categories',
-    //         label: 'Catégories',
-    //         type: 'select',
-    //         options: categories.map((category) => (
-    //             {id: category.id, name: category.name}
-    //         )),
-    //         value: product.categories ? product.categories.map((category) => (
-    //             {id: category.id, name: category.name}
-    //         )) : null,
-    //         defaultValue: "Veuillez saisir une ou plusieurs catégories",
-    //         multiple: true,
-    //
-    //     },
-    // ];
+    const productFields = [
+        {
+            id: 1,
+            name: 'name',
+            label: 'Nom du produit',
+            type: 'text',
+            placeholder: 'Nom du produit',
+            value: product.name ?? '',
+        },
+        {
+            id: 2,
+            name: 'description',
+            label: 'Description',
+            type: 'textarea',
+            placeholder: 'Description du produit',
+            value: product.description ?? '',
+        },
+        {
+            id: 3,
+            name: 'price',
+            label: 'Prix',
+            type: 'number',
+            value: product.price ?? '',
+        },
+        {
+            id: 4,
+            name: 'stock',
+            label: 'Stock',
+            type: 'number',
+            value: product.stock ?? '',
+        },
+        {
+            id: 4,
+            name: 'color',
+            label: 'Couleur',
+            type: 'text',
+            placeholder: 'Couleur du produit',
+            value: product.color ?? '',
+        },
+        {
+            id: 5,
+            name: 'categories',
+            label: 'Catégories',
+            type: 'select',
+            options: categories.map((category) => (
+                {id: category.id, name: category.name}
+            )),
+            value: product.categories ? product.categories.map((category) => (
+                {id: category.id, name: category.name}
+            )) : null,
+            defaultValue: "Veuillez saisir une ou plusieurs catégories",
+            multiple: true,
+
+        },
+    ];
 
     const handleAdd = async (data) => {
         try {
@@ -217,7 +217,7 @@ function AdminProductsPage(props) {
         const originalProducts = [...products];
         setProducts(products.filter(product => product.id !== id));
         try {
-            await ProductAPI.deleteProduct(id);
+            const response = await ProductAPI.deleteProduct(id);
         } catch (error) {
             setProducts(originalProducts);
             console.error(error);
@@ -227,25 +227,25 @@ function AdminProductsPage(props) {
 
     return (
         <AdminContainer title="Gestion des produits">
-            {/*<ButtonModal*/}
-            {/*    buttonLabel="Ajouter un produit"*/}
-            {/*    setShowModal={setShowModal}*/}
-            {/*    setFormType={setFormType}*/}
-            {/*/>*/}
-            {/*<Table*/}
-            {/*    tableHeader={tableHeader}*/}
-            {/*    tableData={tableData}*/}
-            {/*/>*/}
-            {/*<ModalAdmin*/}
-            {/*    formType={formType}*/}
-            {/*    setShowModal={setShowModal}*/}
-            {/*>*/}
-            {/*    <AdminForm*/}
-            {/*        formType={formType}*/}
-            {/*        formFields={productFields}*/}
-            {/*        formSubmit={formType === "add" ? handleAdd : handleEdit}*/}
-            {/*    />*/}
-            {/*</ModalAdmin>*/}
+            <ButtonModal
+                buttonLabel="Ajouter un produit"
+                setShowModal={setShowModal}
+                setFormType={setFormType}
+            />
+            <Table
+                tableHeader={tableHeader}
+                tableData={tableData}
+            />
+            <ModalAdmin
+                formType={formType}
+                setShowModal={setShowModal}
+            >
+                <AdminForm
+                    formType={formType}
+                    formFields={productFields}
+                    formSubmit={formType === "add" ? handleAdd : handleEdit}
+                />
+            </ModalAdmin>
         </AdminContainer>
     );
 }

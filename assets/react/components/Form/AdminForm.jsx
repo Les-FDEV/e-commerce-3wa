@@ -86,7 +86,13 @@ function AdminForm({formType, formFields, formSubmit}) {
     return (
         <form onSubmit={handleSubmit(formSubmit)}>
             {renderFormFields()}
-            <button type="submit" className="btn btn-primary">{formType === "add" ? 'Ajouter' : 'Modifier'}</button>
+            <button
+                type="submit"
+                className="btn btn-primary"
+                data-bs-dismiss="modal"
+            >
+                {formType === "add" ? 'Ajouter' : 'Modifier'}
+            </button>
         </form>
     );
 }

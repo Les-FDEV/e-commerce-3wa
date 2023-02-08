@@ -1,9 +1,10 @@
 import React from 'react';
 
-function ModalAdmin({children, formType, setShowModal}) {
+function ModalAdmin({children, formType, setShowModal,}) {
     return (
         <div className="modal fade" id="modalAdmin" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1"
-             aria-labelledby="staticBackdropLabel" aria-hidden="true">
+             aria-labelledby="staticBackdropLabel" aria-hidden="true"
+        >
             <div className="modal-dialog">
                 <div className="modal-content">
                     <div className="modal-header">
@@ -12,7 +13,7 @@ function ModalAdmin({children, formType, setShowModal}) {
                                 className="modal-title fs-5"
                                 id="staticBackdropLabel"
                             >
-                                {formType !== "add" ? "Ajout" : "Edition"}
+                                {formType !== "add" ? "Edition" : "Ajout"}
                             </h1>
                         }
 

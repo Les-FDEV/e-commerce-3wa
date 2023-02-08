@@ -42,7 +42,7 @@ class Product
     #[Groups(['product:read', 'order:read'])]
     private ?string $description = null;
 
-    #[ORM\OneToMany(mappedBy: 'product', targetEntity: CharacteristicProduct::class)]
+    #[ORM\OneToMany(mappedBy: 'product', targetEntity: CharacteristicProduct::class, orphanRemoval: true)]
     #[Groups(['product:read'])]
     private Collection $characteristicProducts;
 

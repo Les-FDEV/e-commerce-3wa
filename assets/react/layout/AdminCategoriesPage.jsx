@@ -1,10 +1,11 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import Table from "../components/Table/Table";
 import CategoryAPI from "../services/CategoryAPI";
 import AdminContainer from "../components/Container/AdminContainer";
 import ButtonModal from "../components/Modal/ButtonModal";
 import ModalAdmin from "../components/Modal/ModalAdmin";
 import AdminForm from "../components/Form/AdminForm";
+import {ToastContainer} from "react-toastify";
 
 function AdminCategoriesPage(props) {
     const [categories, setCategories] = useState([]);
@@ -14,6 +15,7 @@ function AdminCategoriesPage(props) {
     const [showModal, setShowModal] = useState(false);
     const [currentCategoryID, setCurrentCategoryID] = useState(null);
 
+    // const
 
     const tableHeader = [
         {id: 1, name: '#'},
@@ -82,6 +84,7 @@ function AdminCategoriesPage(props) {
     }, []);
 
     useEffect(() => {
+        console.log(categories)
         setTableData(getDataTable());
     }, [categories]);
 
@@ -98,7 +101,7 @@ function AdminCategoriesPage(props) {
             label: "Nom de la catégorie",
             type: "text",
             placeholder: "Nom de la catégorie",
-            value: category.name ?? ""
+            value: category.name ?? undefined
         },
         {
             id: 2,
@@ -106,12 +109,21 @@ function AdminCategoriesPage(props) {
             label: "Description",
             type: "textarea",
             placeholder: "Description de la catégorie",
-            value: category.description ?? ""
+            value: category.description ?? undefined
         },
     ];
 
-    const handleAdd = (data) => {
-        console.log(data)
+    const handleAdd = async (data) => {
+        try {
+            const response = await CategoryAPI.createCategory(data);
+            if (response.status === 201) {
+                console.log(response.data)
+                setCategories([response.data, ...categories]);
+                setShowModal(false);
+            }
+        } catch (error) {
+            console.error(error)
+        }
     }
 
     const handleEdit = (data) => {
@@ -130,29 +142,32 @@ function AdminCategoriesPage(props) {
     }
 
     return (
-        <AdminContainer title="Gestion des catégories">
-            <ButtonModal
-                buttonLabel="Ajouter une catégorie"
-                setFormType={setFormType}
-                setShowModal={setShowModal}
-            />
-            <Table
-                tableHeader={tableHeader}
-                tableData={tableData}
-            />
-            {showModal && (
-                <ModalAdmin
-                    formType={formType}
+        <>
+            <AdminContainer title="Gestion des catégories">
+                <ButtonModal
+                    buttonLabel="Ajouter une catégorie"
+                    setFormType={setFormType}
                     setShowModal={setShowModal}
-                >
-                    <AdminForm
-                        formFields={categoryFields}
+                />
+                <Table
+                    tableHeader={tableHeader}
+                    tableData={tableData}
+                />
+                {showModal && (
+                    <ModalAdmin
                         formType={formType}
-                        formSubmit={formType === "add" ? handleAdd : handleEdit}
-                    />
-                </ModalAdmin>
-            )}
-        </AdminContainer>
+                        setShowModal={setShowModal}
+                    >
+                        <AdminForm
+                            formFields={categoryFields}
+                            formType={formType}
+                            formSubmit={formType === "add" ? handleAdd : handleEdit}
+                        />
+                    </ModalAdmin>
+                )}
+            </AdminContainer>
+            <ToastContainer/>
+        </>
     );
 }
 

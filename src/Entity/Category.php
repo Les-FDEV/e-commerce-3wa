@@ -23,6 +23,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
         new Put,
         new Delete
     ],
+    order: ['id' => 'DESC'],
     //denormalizationContext: ['groups' => ['address:input']],
 )]
 class Category
@@ -46,7 +47,6 @@ class Category
 
     public function __construct()
     {
-        $this->categoriesProduct = new ArrayCollection();
         $this->products = new ArrayCollection();
     }
 
@@ -75,36 +75,6 @@ class Category
     public function setDescription(?string $description): self
     {
         $this->description = $description;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, CategoriesProduct>
-     */
-    public function getCategoriesProducts(): Collection
-    {
-        return $this->categoriesProduct;
-    }
-
-    public function addCategoryProduct(CategoriesProduct $categoryProduct): self
-    {
-        if (!$this->categoriesProduct->contains($categoryProduct)) {
-            $this->categoriesProduct->add($categoryProduct);
-            $categoryProduct->setProduct($this);
-        }
-
-        return $this;
-    }
-
-    public function removeCategoryProduct(CategoriesProduct $categoryProduct): self
-    {
-        if ($this->categoriesProduct->removeElement($categoryProduct)) {
-            // set the owning side to null (unless already changed)
-            if ($categoryProduct->getProduct() === $this) {
-                $categoryProduct->setProduct(null);
-            }
-        }
 
         return $this;
     }

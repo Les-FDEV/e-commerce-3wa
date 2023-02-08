@@ -26,8 +26,7 @@ const updateProduct = (id, product) => {
 
 const deleteProduct = (id) => {
     return axios.delete(PRODUCT_URL + "/" + id)
-        .then(response => response.data)
-        .catch(error => error);
+        .then(response => response)
 }
 
 export default {
