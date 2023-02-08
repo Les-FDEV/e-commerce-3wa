@@ -3,7 +3,7 @@ import {CATEGORY_URL} from "../config/config";
 
 const getAllCategories = () => {
     return axios.get(CATEGORY_URL)
-        .then(response => response.data)
+        .then(response => response.data['hydra:member'])
         .catch(error => console.log(error));
 }
 

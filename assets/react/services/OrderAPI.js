@@ -3,7 +3,7 @@ import axios from "axios";
 
 const getAllOrders = () => {
     return axios.get(ORDER_URL)
-        .then(response => response.data)
+        .then(response => response.data['hydra:member'])
         .catch(error => console.log(error));
 }
 

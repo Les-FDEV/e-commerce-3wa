@@ -30,10 +30,31 @@ function AdminCustomersPage() {
                         {value: customer.firstname},
                         {value: customer.email},
                         {value: customer.phone},
-                        {value: <button className="btn btn-sm btn-primary me-4 mb-2">Fiche client</button>}
+                        {
+                            value: (
+                                <>
+                                    <button
+                                        className="btn btn-sm btn-danger inline me-4 mb-2"
+                                        onClick={() => handleDelete(customer.id)}
+                                    >
+                                        Supprimer
+                                    </button>
+                                    <button
+                                        className="btn btn-sm btn-primary me-4 mb-2"
+                                        onClick={() => {
+                                            setShowModal(true)
+                                            setCurrentCustomerID(customer.id)
+                                        }}
+                                    >
+                                        Fiche client
+                                    </button>
+                                </>
+                            )
+                        }
                     ]
                 )
-            );
+            )
+                ;
         }
     }
 
@@ -63,6 +84,12 @@ function AdminCustomersPage() {
         setTableData(getDataTable())
     }, [customers])
 
+    useEffect(() => {
+        if (currentCustomerID) {
+            getCustomerData()
+        }
+    }, [currentCustomerID])
+
     const handleDelete = async (id) => {
         const originalCustomers = [...customers]
         setCustomers(customers.filter(customer => customer.id !== id))
@@ -81,7 +108,6 @@ function AdminCustomersPage() {
                 tableData={tableData}
             />
             <ModalAdmin
-                formType={formType}
                 setShowModal={setShowModal}
             >
             </ModalAdmin>
