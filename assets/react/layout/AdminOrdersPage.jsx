@@ -76,7 +76,7 @@ function AdminOrdersPage(props) {
 
     const getOrdersData = async () => {
         try {
-            const data = await OrderAPI.findAll();
+            const data = await OrderAPI.getAllOrders();
             setOrders(data);
         } catch (error) {
             console.log(error.response);
@@ -97,6 +97,7 @@ function AdminOrdersPage(props) {
     }, []);
 
     useEffect(() => {
+        console.log(orders)
         setTableData(getDataTable());
     }, [orders]);
 
@@ -120,7 +121,7 @@ function AdminOrdersPage(props) {
     return (
         <AdminContainer title="Gestion des commandes">
             <Table
-                header={tableHeader}
+                tableHeader={tableHeader}
                 tableData={tableData}
             />
             <ModalAdmin

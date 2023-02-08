@@ -11,6 +11,7 @@ use ApiPlatform\Metadata\Put;
 use App\Repository\CharacteristicProductRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: CharacteristicProductRepository::class)]
 #[ApiResource(
@@ -28,6 +29,7 @@ class CharacteristicProduct
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['product:read'])]
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'characteristicProduct')]
@@ -37,9 +39,11 @@ class CharacteristicProduct
     private ?Characteristic $characteristic = null;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 5, scale: 2)]
+    #[Groups(['product:read'])]
     private ?string $price = null;
 
     #[ORM\Column]
+    #[Groups(['product:read'])]
     private ?int $stock = null;
 
     public function getId(): ?int

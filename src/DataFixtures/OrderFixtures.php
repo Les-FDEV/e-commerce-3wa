@@ -15,14 +15,19 @@ class OrderFixtures extends Fixture
 
         $status = ['en cours', 'envoyé', 'livré', 'annulé'];
         for ($o = 0; $o < 20; $o++) {
-            $order = new Order;
-            $order->setCreatedAt($faker->dateTimeBetween('-1 years', '1 years'))
+            $order = new Order();
+            $order
+                ->setTotal($faker->randomFloat(2, 0, 1000))
+                ->setCreatedAt($faker->dateTimeBetween('-1 years', '1 years'))
+                ->setConfirmedAt($faker->dateTimeBetween('-1 years', '1 years'))
                 ->setUser($this->getReference('user' . $faker->numberBetween(0, 9)))
                 ->setStatut($status[$faker->numberBetween(0, 3)]);
-
+            ;
             $this->addReference('order' . $o, $order);
 
             $manager->persist($order);
+
+
         }
 
         $manager->flush();

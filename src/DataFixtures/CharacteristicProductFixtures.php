@@ -4,10 +4,11 @@ namespace App\DataFixtures;
 
 use App\Entity\CharacteristicProduct;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 use Faker;
 
-class CharacteristicProductFixtures extends Fixture
+class CharacteristicProductFixtures extends Fixture implements DependentFixtureInterface
 {
     public function load(ObjectManager $manager): void
     {
@@ -28,5 +29,14 @@ class CharacteristicProductFixtures extends Fixture
         }
 
         $manager->flush();
+    }
+
+    public function getDependencies(): array
+    {
+        return [
+            ProductFixtures::class,
+            CharacteristicFixtures::class
+        ];
+        // TODO: Implement getDependencies() method.
     }
 }

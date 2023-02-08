@@ -12,6 +12,7 @@ use App\Repository\CategoryRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: CategoryRepository::class)]
 #[ApiResource(
@@ -22,7 +23,6 @@ use Doctrine\ORM\Mapping as ORM;
         new Put,
         new Delete
     ],
-    //normalizationContext: ['groups' => ['address:output']],
     //denormalizationContext: ['groups' => ['address:input']],
 )]
 class Category
@@ -30,20 +30,24 @@ class Category
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['product:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 127)]
+    #[Groups(['product:read'])]
     private ?string $name = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['product:read'])]
     private ?string $description = null;
 
-    #[ORM\OneToMany(mappedBy: 'category', targetEntity: CategoriesProduct::class)]
-    private Collection $categoriesProduct;
+    #[ORM\ManyToMany(targetEntity: Product::class, inversedBy: 'categories')]
+    private Collection $products;
 
     public function __construct()
     {
         $this->categoriesProduct = new ArrayCollection();
+        $this->products = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -101,6 +105,30 @@ class Category
                 $categoryProduct->setProduct(null);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Product>
+     */
+    public function getProducts(): Collection
+    {
+        return $this->products;
+    }
+
+    public function addProduct(Product $product): self
+    {
+        if (!$this->products->contains($product)) {
+            $this->products->add($product);
+        }
+
+        return $this;
+    }
+
+    public function removeProduct(Product $product): self
+    {
+        $this->products->removeElement($product);
 
         return $this;
     }
