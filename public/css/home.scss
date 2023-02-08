@@ -36,6 +36,11 @@ body{
     a{
       text-decoration: none;
       color: white;
+      &:hover{
+        color: $color2;
+        opacity: 0.8;
+        transition: all 0.3s;
+      }
     }
 
   }
@@ -47,7 +52,7 @@ body{
   border-bottom: 3px solid $color2;
   h1{
     color: white;
-    font-size: 49px;
+    font-size: 65px;
     margin: 18px;
     span{
       color: $color2;
@@ -151,6 +156,33 @@ nav{
 .container{
   width: 68%;
   margin: 0 auto;
+  h2{
+    margin-top: 50px;
+    text-transform: uppercase;
+    position: relative;
+    margin-bottom: 20px;
+    &::after{
+      position: absolute;
+      content: "";
+      width: 73px;
+      height: 3px;
+      background-color: #D11F25;
+      bottom: -7px;
+      left: 0%;
+    }
+  }
+  .rand-product{
+    border: 2px solid rgba(192,192,192, 0.70);
+    text-align: center;
+    height: 350px;
+    h3{
+      margin-top: 25px;
+    }
+    p{
+      width: 50%;
+      margin: 0 auto;
+    }
+  }
   .newProduct{
     h2{
       margin-top: 50px;
@@ -179,8 +211,8 @@ nav{
 .footer{
 
   width: 100%;
-  background-color: rgba(192,192,192, 0.70);
-  height: 288px;
+  background-color: $color3;
+  height: 289px;
   margin-top: 80px;
   border-top: 2px solid $color1;
   .footer-fdev{
@@ -189,7 +221,7 @@ nav{
     left: 61px;
     h4{
       font-size: 55px;
-      color: $color1;
+      color: white;
       position: relative;
       &::after{
         position: absolute;
@@ -205,10 +237,11 @@ nav{
       }
     }
     h5{
-      color: $color1;
+      color: white;
     }
     p{
       margin-bottom: 5px;
+      color: lightgrey;
     }
   }
   .footer-product{
@@ -228,3 +261,4 @@ nav{
     }
   }
 }
+

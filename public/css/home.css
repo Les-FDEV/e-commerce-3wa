@@ -35,6 +35,11 @@ body {
   text-decoration: none;
   color: white;
 }
+.top-nav .account a:hover {
+  color: #D11F25;
+  opacity: 0.8;
+  transition: all 0.3s;
+}
 
 .search-bar {
   background-color: #15161C;
@@ -42,7 +47,7 @@ body {
 }
 .search-bar h1 {
   color: white;
-  font-size: 49px;
+  font-size: 65px;
   margin: 18px;
 }
 .search-bar h1 span {
@@ -142,6 +147,33 @@ nav ul li a:hover {
   width: 68%;
   margin: 0 auto;
 }
+.container h2 {
+  margin-top: 50px;
+  text-transform: uppercase;
+  position: relative;
+  margin-bottom: 20px;
+}
+.container h2::after {
+  position: absolute;
+  content: "";
+  width: 73px;
+  height: 3px;
+  background-color: #D11F25;
+  bottom: -7px;
+  left: 0%;
+}
+.container .rand-product {
+  border: 2px solid rgba(192, 192, 192, 0.7);
+  text-align: center;
+  height: 350px;
+}
+.container .rand-product h3 {
+  margin-top: 25px;
+}
+.container .rand-product p {
+  width: 50%;
+  margin: 0 auto;
+}
 .container .newProduct h2 {
   margin-top: 50px;
 }
@@ -166,8 +198,8 @@ nav ul li a:hover {
 
 .footer {
   width: 100%;
-  background-color: rgba(192, 192, 192, 0.7);
-  height: 288px;
+  background-color: #15161C;
+  height: 289px;
   margin-top: 80px;
   border-top: 2px solid #1D202B;
 }
@@ -178,7 +210,7 @@ nav ul li a:hover {
 }
 .footer .footer-fdev h4 {
   font-size: 55px;
-  color: #1D202B;
+  color: white;
   position: relative;
 }
 .footer .footer-fdev h4::after {
@@ -194,10 +226,11 @@ nav ul li a:hover {
   color: #D11F25;
 }
 .footer .footer-fdev h5 {
-  color: #1D202B;
+  color: white;
 }
 .footer .footer-fdev p {
   margin-bottom: 5px;
+  color: lightgrey;
 }
 .footer .footer-product {
   display: flex;
