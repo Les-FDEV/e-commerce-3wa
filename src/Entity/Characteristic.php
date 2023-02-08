@@ -13,6 +13,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: CharacteristicRepository::class)]
 #[ApiResource(
@@ -30,15 +31,19 @@ class Characteristic
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['product:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 63, nullable: true)]
+    #[Groups(['product:read'])]
     private ?string $color = null;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 5, scale: 2, nullable: true)]
+    #[Groups(['product:read'])]
     private ?string $weight = null;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 5, scale: 2, nullable: true)]
+    #[Groups(['product:read'])]
     private ?string $memory = null;
 
     #[ORM\OneToMany(mappedBy: 'characteristic', targetEntity: CharacteristicProduct::class)]

@@ -14,6 +14,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
@@ -33,9 +34,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['order:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
+    #[Groups(['order:read'])]
     private ?string $email = null;
 
     #[ORM\Column]
@@ -48,20 +51,27 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $password = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['order:read'])]
     private ?string $firstname = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['order:read'])]
     private ?string $lastname = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['order:read'])]
     private ?string $phoneNumber = null;
 
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Address::class)]
     private Collection $addresses;
 
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Order::class)]
+    private Collection $orders;
+
     public function __construct()
     {
         $this->addresses = new ArrayCollection();
+        $this->orders = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -88,7 +98,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getUserIdentifier(): string
     {
-        return (string) $this->email;
+        return (string)$this->email;
     }
 
     /**
@@ -195,6 +205,24 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             if ($address->getUser() === $this) {
                 $address->setUser(null);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Order>
+     */
+    public function getOrders(): Collection
+    {
+        return $this->orders;
+    }
+
+    public function addOrder(Order $order): self
+    {
+        if (!$this->orders->contains($order)) {
+            $this->orders[] = $order;
+            $order->setUser($this);
         }
 
         return $this;

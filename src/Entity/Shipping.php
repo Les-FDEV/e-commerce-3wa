@@ -13,6 +13,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: ShippingRepository::class)]
 #[ApiResource(
@@ -31,18 +32,22 @@ class Shipping
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['order:read'])]
     private ?int $id = null;
 
     #[ORM\OneToMany(mappedBy: 'shipping', targetEntity: Order::class)]
     private Collection $orderReference;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['order:read'])]
     private ?string $method = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['order:read'])]
     private ?string $status = null;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 5, scale: 2)]
+    #[Groups(['order:read'])]
     private ?string $cost = null;
 
     public function __construct()
