@@ -10,7 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('/api')]
+#[Route('/api2')]
 class ApiController extends AbstractController
 {
     public function __construct(
@@ -60,6 +60,46 @@ class ApiController extends AbstractController
     }
     #[Route('/products', name: 'api_products')]
     public function getProducts(): Response
+    {
+        $products = $this->productRepository->findAll();
+        $allProducts = [];
+        foreach ($products as $product){
+            $categoriesProduct = $product->getCategoriesProducts();
+            $allCategories = [];
+            foreach ($categoriesProduct as $categoryProduct){
+                $category = $categoryProduct->getCategory();
+                $allCategories[] = [
+                    'name' => $category->getName(),
+                    'id' => $category->getId()
+                ];
+            }
+            $characteristicsProduct = $product->getCharacteristicProducts();
+            $allCharacteristics = [];
+            foreach ($characteristicsProduct as $characteristicProduct){
+                $characteristic = $characteristicProduct->getCharacteristic();
+                $allCharacteristics[] = [
+                    'id' => $characteristic->getId(),
+                    'price' => $characteristicProduct->getPrice(),
+                    'stock' => $characteristicProduct->getStock()
+                ];
+            }
+            $allProducts[] = [
+                'id' => $product->getId(),
+                'name' => $product->getName(),
+                'description' => $product->getDescription(),
+                'categories' => $allCategories,
+                'characteristics' => $allCharacteristics
+            ];
+        }
+
+        $response = new Response();
+        $response->headers->set('Content-Type', 'application/json');
+        $response->headers->set('Access-Control-Allow-Origin', '*');
+        $response->setContent(json_encode($allProducts));
+        return $response;
+    }
+    #[Route('/product/add', name: 'api_product_add')]
+    public function addProduct(): Response
     {
         $products = $this->productRepository->findAll();
         $allProducts = [];

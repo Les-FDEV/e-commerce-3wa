@@ -2,10 +2,26 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
 use App\Repository\OrderProductsRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: OrderProductsRepository::class)]
+#[ApiResource(
+    operations: [
+        new Get,
+        new Post,
+        new Put,
+        new Delete
+    ],
+    //normalizationContext: ['groups' => ['address:output']],
+    //denormalizationContext: ['groups' => ['address:input']],
+)]
 class OrderProducts
 {
     #[ORM\Id]
