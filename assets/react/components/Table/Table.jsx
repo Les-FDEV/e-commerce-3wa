@@ -1,57 +1,31 @@
 import React, {useEffect, useState} from 'react';
 import ProductAPI from "../../services/ProductAPI";
 
-function Table({useCase}) {
-    const [products, setProducts] = useState([]);
-    const getProducts = async () => {
-        try {
-            const data = await ProductAPI.getAllProducts();
-            setProducts(data)
-        } catch (error) {
-            console.error(error)
-        }
-    }
+function Table({tableHeader, tableData}) {
+    const rowHeader = tableHeader.map((header, index) =>
+        <th key={index} scope="col">{header.name}</th>
+    );
 
-    useEffect(() => {
-        getProducts();
-    }, []);
+    const rowData = tableData.map((data, index) =>
+        <tr key={index}>
+            {
+                data.map((value, index) =>
+                    <td key={index}>{value.value}</td>
+                )
+            }
+        </tr>
+    );
 
-    useEffect(() => {
-        console.log(products)
-    }, [products]);
 
     return (
         <table className="table">
             <thead>
             <tr>
-                <th scope="col">#</th>
-                <th scope="col">Catégories</th>
-                <th scope="col">Produits</th>
-                <th scope="col">Stock</th>
-                <th scope="col">Action</th>
+                {rowHeader}
             </tr>
             </thead>
             <tbody>
-            {
-                products.map((product, index) => (
-                        <tr key={index}>
-                            <th scope="row">{index + 1}</th>
-                            <td>
-                                {product.categories
-                                    .map((category, index) =>
-                                        <span key={index} className="badge badge-primary">{category.name}</span>
-                                    )
-                                }
-                            </td>
-                            <td>{product.name}</td>
-                            <td>{product.stock}</td>
-                            <td>
-                                <button className="btn btn-sm btn-danger">Supprimer</button>
-                            </td>
-                        </tr>
-                    )
-                )
-            }
+            {rowData}
             </tbody>
         </table>
     )
