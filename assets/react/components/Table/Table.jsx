@@ -1,5 +1,4 @@
-import React, {useEffect, useState} from 'react';
-import ProductAPI from "../../services/ProductAPI";
+import React from 'react';
 
 function Table({tableHeader, tableData}) {
     const rowHeader = tableHeader.map((header, index) =>
