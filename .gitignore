@@ -11,6 +11,7 @@
 /var/
 /vendor/
 /migrations/
+.env.local
 ###< symfony/framework-bundle ###
 
 ###> phpunit/phpunit ###
