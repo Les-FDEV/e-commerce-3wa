@@ -1,5 +1,5 @@
 import React from 'react';
-import { MultiSelect } from "react-multi-select-component";
+import {MultiSelect} from "react-multi-select-component";
 
 function FormSelect({options, selected, setSelected}) {
     return (

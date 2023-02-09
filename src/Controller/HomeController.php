@@ -14,7 +14,7 @@ class HomeController extends AbstractController
     public function index(ProductRepository $productRepository, CategoryRepository $categoryRepository): Response
     {
         $products = $productRepository->findBy(array(),array('id' => 'DESC'),5 );
-        $id = rand(20,50);
+        $id = rand(530,1600);
         $productsRand = $productRepository->find($id);
         if ($productsRand == null){
             $productsRand = $productRepository->find(515);

@@ -5,7 +5,6 @@ import FormInput from "./FormInput";
 import FormTextarea from "./FormTextarea";
 import FormSelect from "./FormSelect";
 let fin = false
-
 function AdminForm({formType, formFields, formSubmit, selected, setSelected}) {
     const {register, handleSubmit, setValue} = useForm(),
         [change, setChange] = useState(false)
@@ -33,13 +32,7 @@ function AdminForm({formType, formFields, formSubmit, selected, setSelected}) {
             formFields.forEach(field => setValue(field.name, ""));
         }
     }, [formType, change]);
-
-
-
-    useEffect(() => {
-        //console.log(selected)
-    }, [selected])
-
+    
     const renderFormFields = () => {
         return formFields.map((field, index) => {
             switch (field.type) {
@@ -96,8 +89,18 @@ function AdminForm({formType, formFields, formSubmit, selected, setSelected}) {
                             <FormLabel htmlFor={field.name} label={field.label}/>
                             <FormSelect
                                 options={field.options}
-                                selected={selected}
-                                setSelected={setSelected}
+                                selected={
+                                    field.name === "categories" ?
+                                        selectedCategories : field.name === "weight" ?
+                                            selectedWeight : selectedColor
+                                }
+                                setSelected={
+                                    field.name === "categories" ?
+                                        setSelectedCategories : field.name === "weight" ?
+                                            setSelectedWeight : setSelectedColor
+
+                                }
+                                multiple={field.multiple}
                             />
                         </div>
                     );
