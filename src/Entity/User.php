@@ -63,6 +63,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $phoneNumber = null;
 
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Address::class)]
+    #[Groups(['order:read'])]
     private Collection $addresses;
 
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Order::class)]

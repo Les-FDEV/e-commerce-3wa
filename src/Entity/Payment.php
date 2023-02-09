@@ -32,7 +32,7 @@ class Payment
     #[Groups(['order:read'])]
     private ?int $id = null;
 
-    #[ORM\OneToOne(inversedBy: 'payment', cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(inversedBy: 'payment', cascade: ['persist', 'remove'], orphanRemoval: true)]
     #[ORM\JoinColumn(nullable: false)]
     private ?Order $orderReference = null;
 

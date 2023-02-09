@@ -58,7 +58,7 @@ class Order
     #[Groups(['order:read'])]
     private Collection $orderProducts;
 
-    #[ORM\OneToOne(mappedBy: 'orderReference', cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(mappedBy: 'orderReference', cascade: ['persist', 'remove'], orphanRemoval: true)]
     #[ORM\JoinColumn(nullable: true)]
     #[Groups(['order:read'])]
     private ?Payment $payment = null;
@@ -69,7 +69,8 @@ class Order
     private ?Shipping $shipping = null;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2, nullable: true)]
-    private ?string $Total = null;
+    #[Groups(['order:read'])]
+    private ?string $total = null;
 
     public function __construct()
     {
@@ -190,12 +191,12 @@ class Order
 
     public function getTotal(): ?string
     {
-        return $this->Total;
+        return $this->total;
     }
 
-    public function setTotal(?string $Total): self
+    public function setTotal(?string $total): self
     {
-        $this->Total = $Total;
+        $this->total = $total;
 
         return $this;
     }
