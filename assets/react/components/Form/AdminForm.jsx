@@ -106,8 +106,17 @@ function AdminForm({
                             <FormLabel htmlFor={field.name} label={field.label}/>
                             <FormSelect
                                 options={field.options}
-                                selected={selected}
-                                setSelected={setSelected}
+                                selected={
+                                    field.name === "categories" ?
+                                        selectedCategories : field.name === "weight" ?
+                                            selectedWeight : selectedColor
+                                }
+                                setSelected={
+                                    field.name === "categories" ?
+                                        setSelectedCategories : field.name === "weight" ?
+                                            setSelectedWeight : setSelectedColor
+
+                                }
                                 multiple={field.multiple}
                             />
                         </div>
