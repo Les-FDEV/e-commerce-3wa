@@ -4,10 +4,22 @@
 
 {% block body %}
     <div class="container">
-        <h2>Produit du jour</h2>
+
+        <div class="resultsreach">
+            <h1></h1>
+            <div class="product">
+                <h5></h5>
+                <h6></h6>
+                <p></p>
+            </div>
+
+        </div>
+        <h2 class="productOfTheDay">Produit du jour</h2>
         <div class="rand-product">
-            <h3>{{ productsRand.name }}</h3>
-            <p>{{ productsRand.description }}</p>
+            {% for productsRands in productsRand %}
+                <h3>{{ productsRands.name }}</h3>
+                <p>{{ productsRands.description }}</p>
+            {% endfor %}
         </div>
         <div class="newProduct">
             <h2>Nouveaux produit</h2>
