@@ -13,6 +13,7 @@
 /vendor/
 /migrations/
 .env.local
+.env.test.local
 ###< symfony/framework-bundle ###
 
 ###> phpunit/phpunit ###
