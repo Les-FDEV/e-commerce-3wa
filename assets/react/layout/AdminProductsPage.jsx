@@ -223,7 +223,6 @@ function AdminProductsPage() {
                 }
                 try {
                     const response = await CharacteristicsAPI.createCharacteristic(newCharacteristic)
-                    console.log(response)
 
                     if (response.status === 201) {
                         const characteristicProducts = {
@@ -232,7 +231,7 @@ function AdminProductsPage() {
                             characteristic: CHARACTERISTICS_URL + "/" + response.data.id,
                         }
                         const lastResponse = await CharacteristicProductsAPI.createCharacteristicProduct(characteristicProducts)
-                        setCharacteristicProducts(lastResponse.data)
+                        setCharacteristicProducts([...characteristicProducts, lastResponse.data])
                     }
                 } catch (error) {
                     console.error(error)
@@ -255,6 +254,8 @@ function AdminProductsPage() {
             )
         }
 
+        console.log(newProduct)
+
         try {
             const response = await ProductAPI.createProduct(newProduct);
             console.log(response)
@@ -262,6 +263,10 @@ function AdminProductsPage() {
             console.error(error);
         }
     }
+
+    useEffect(() => {
+        console.log(characteristicProducts)
+    }, [characteristicProducts])
 
     const handleEdit = async (data) => {
         const originalProducts = [...products];
