@@ -15,9 +15,9 @@ class CharacteristicFixtures extends Fixture
 
         for ($i = 0; $i < 30; $i++) {
             $characteristic = new Characteristic;
-            $characteristic->setColor($faker->colorName)
-                ->setMemory($faker->numberBetween(16, 1024))
-                ->setWeight($faker->randomFloat(2));
+            $characteristic->setName($faker->word)
+                ->setType($faker->word)
+                ->setValue($faker->word);
             $manager->persist($characteristic);
             $this->addReference('characteristic' . $i, $characteristic);
         }

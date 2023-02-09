@@ -52,7 +52,6 @@ class Product
 
     public function __construct()
     {
-        $this->categoriesProduct = new ArrayCollection();
         $this->characteristicProducts = new ArrayCollection();
         $this->categories = new ArrayCollection();
     }
@@ -109,36 +108,6 @@ class Product
             // set the owning side to null (unless already changed)
             if ($characteristicProduct->getProduct() === $this) {
                 $characteristicProduct->setProduct(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, CategoriesProduct>
-     */
-    public function getCategoriesProducts(): Collection
-    {
-        return $this->categoriesProduct;
-    }
-
-    public function addCategoryProduct(CategoriesProduct $categoryProduct): self
-    {
-        if (!$this->categoriesProduct->contains($categoryProduct)) {
-            $this->categoriesProduct->add($categoryProduct);
-            $categoryProduct->setProduct($this);
-        }
-
-        return $this;
-    }
-
-    public function removeCategoryProduct(CategoriesProduct $categoryProduct): self
-    {
-        if ($this->categoriesProduct->removeElement($categoryProduct)) {
-            // set the owning side to null (unless already changed)
-            if ($categoryProduct->getProduct() === $this) {
-                $categoryProduct->setProduct(null);
             }
         }
 
