@@ -46,9 +46,9 @@ class ApiController extends AbstractController
         foreach ($characteristics as $characteristic){
             $allCharacteristics[] = [
                 'id' => $characteristic->getId(),
-                'color' => $characteristic->getColor(),
-                'weight' => $characteristic->getWeight(),
-                'memory' => $characteristic->getMemory()
+                'color' => $characteristic->getName(),
+                'weight' => $characteristic->getValue(),
+                'memory' => $characteristic->getType()
             ];
         }
 
