@@ -19,6 +19,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ApiResource(
     operations: [
         new Get,
+        new GetCollection,
         new Post,
         new Put,
         new Delete

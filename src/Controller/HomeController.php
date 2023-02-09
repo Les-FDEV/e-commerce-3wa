@@ -17,7 +17,7 @@ class HomeController extends AbstractController
         $id = rand(20,50);
         $productsRand = $productRepository->find($id);
         if ($productsRand == null){
-            $productsRand = $productRepository->find(35);
+            $productsRand = $productRepository->find(1535);
         }
 
         $categs = $categoryRepository->findAll();
