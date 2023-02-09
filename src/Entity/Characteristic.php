@@ -36,15 +36,15 @@ class Characteristic
 
     #[ORM\Column(length: 63, nullable: true)]
     #[Groups(['product:read'])]
-    private ?string $color = null;
+    private ?string $name = null;
 
-    #[ORM\Column(type: Types::DECIMAL, precision: 5, scale: 2, nullable: true)]
+    #[ORM\Column(length: 63, nullable: true)]
     #[Groups(['product:read'])]
-    private ?string $weight = null;
+    private ?string $value = null;
 
-    #[ORM\Column(type: Types::DECIMAL, precision: 5, scale: 2, nullable: true)]
+    #[ORM\Column(length: 63, nullable: true)]
     #[Groups(['product:read'])]
-    private ?string $memory = null;
+    private ?string $type = null;
 
     #[ORM\OneToMany(mappedBy: 'characteristic', targetEntity: CharacteristicProduct::class)]
     private Collection $characteristicProducts;
@@ -59,38 +59,38 @@ class Characteristic
         return $this->id;
     }
 
-    public function getColor(): ?string
+    public function getName(): ?string
     {
-        return $this->color;
+        return $this->name;
     }
 
-    public function setColor(?string $color): self
+    public function setName(?string $name): self
     {
-        $this->color = $color;
+        $this->name = $name;
 
         return $this;
     }
 
-    public function getWeight(): ?string
+    public function getValue(): ?string
     {
-        return $this->weight;
+        return $this->value;
     }
 
-    public function setWeight(?string $weight): self
+    public function setValue(?string $value): self
     {
-        $this->weight = $weight;
+        $this->value = $value;
 
         return $this;
     }
 
-    public function getMemory(): ?string
+    public function getType(): ?string
     {
-        return $this->memory;
+        return $this->type;
     }
 
-    public function setMemory(?string $memory): self
+    public function setType(?string $type): self
     {
-        $this->memory = $memory;
+        $this->type = $type;
 
         return $this;
     }

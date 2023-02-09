@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <div class="container">
+
+        <div  {{ react_component('AddProductInCartController',{ id : 1}) }} > </div >
+        <div  {{ react_component('AddProductInCartController',{ id : 2}) }} > </div >
+        <div  {{ react_component('AddProductInCartController',{ id : 3}) }} > </div >
+        <div  {{ react_component('AddProductInCartController',{ id : 4}) }} > </div >
+
+    </div>
+
+
+    <div  {{ react_component('CartController') }} > </div >
+
+{% endblock %}
