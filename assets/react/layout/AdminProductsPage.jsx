@@ -6,16 +6,23 @@ import ModalAdmin from "../components/Modal/ModalAdmin";
 import AdminForm from "../components/Form/AdminForm";
 import CategoryAPI from "../services/CategoryAPI";
 import ButtonModal from "../components/Modal/ButtonModal";
+import CharacteristicsAPI from "../services/CharacteristicsAPI";
+import {CATEGORY_PRODUCTS_URL, CATEGORY_URL, CHARACTERISTIC_PRODUCTS_URL, CHARACTERISTICS_URL} from "../config/config";
+import CharacteristicProductsAPI from "../services/CharacteristicProductsAPI";
+import {toast} from "react-toastify";
 
 function AdminProductsPage() {
     const [products, setProducts] = useState([]);
     const [product, setProduct] = useState({});
     const [categories, setCategories] = useState([]);
+    const [characteristicProducts, setCharacteristicProducts] = useState([]);
     const [tableData, setTableData] = useState([]);
     const [formType, setFormType] = useState("add");
     const [showModal, setShowModal] = useState(false);
     const [currentProductID, setCurrentProductID] = useState(null);
-    const [selected, setSelected] = useState([]);
+    const [selectedCategories, setSelectedCategories] = useState([]);
+    const [selectedWeight, setSelectedWeight] = useState([]);
+    const [selectedColor, setSelectedColor] = useState([]);
 
     // Le code pour remplir le tableau de data
 
@@ -143,22 +150,48 @@ function AdminProductsPage() {
             name: 'price',
             label: 'Prix',
             type: 'number',
-            value: product.price ?? '',
+            value: product.characteristicProducts ? product.characteristicProducts[0].price : '',
         },
         {
             id: 4,
             name: 'stock',
             label: 'Stock',
             type: 'number',
-            value: product.stock ?? '',
+            value: product.characteristicProducts ? product.characteristicProducts[0].stock : '',
         },
         {
-            id: 4,
+            id: 5,
+            name: 'weight',
+            label: 'Poids',
+            type: 'select',
+            options: [
+                {label: "moins de 500g", value: "moins de 500g", ormValue: "weight"},
+                {label: "500g à 1kg", value: "500g à 1kg", ormValue: "weight"},
+                {label: "1kg à 2kg", value: "1kg à 2kg", ormValue: "weight"},
+                {label: "2kg à 3kg", value: "2kg à 3kg", ormValue: "weight"},
+                {label: "plus de 3kg", value: "plus de 3kg", ormValue: "weight"}
+            ],
+            value: product.characteristicProducts ? product.characteristicProducts[0].weight : '',
+        },
+        {
+            id: 6,
             name: 'color',
             label: 'Couleur',
-            type: 'text',
-            placeholder: 'Couleur du produit',
-            value: product.color ?? '',
+            type: 'select',
+            options: [
+                {label: "Blanc", value: "Blanc", ormValue: "color"},
+                {label: "Noir", value: "Noir", ormValue: "color"},
+                {label: "Rouge", value: "Rouge", ormValue: "color"},
+                {label: "Bleu", value: "Bleu", ormValue: "color"},
+                {label: "Vert", value: "Vert", ormValue: "color"},
+                {label: "Jaune", value: "Jaune", ormValue: "color"},
+                {label: "Orange", value: "Orange", ormValue: "color"},
+                {label: "Rose", value: "Rose", ormValue: "color"},
+                {label: "Violet", value: "Violet", ormValue: "color"},
+                {label: "Gris", value: "Gris", ormValue: "color"},
+                {label: "Marron", value: "Marron", ormValue: "color"},
+                {label: "Autre", value: "Autre", ormValue: "color"}
+            ],
         },
         {
             id: 5,
@@ -177,18 +210,58 @@ function AdminProductsPage() {
     ];
 
     const handleAdd = async (data) => {
-        try {
-            const response = await ProductAPI.createProduct(data);
+        const characteristics = [
+            selectedColor,
+            selectedWeight,
+        ]
 
-            if (response.status === 201) {
-                setProducts([...products, response.data]);
-                setShowModal(false)
+        for (const characteristic of characteristics) {
+            for (const [key, value] of Object.entries(characteristic)) {
+                const newCharacteristic = {
+                    name: value.ormValue,
+                    value: value.value,
+                }
+                try {
+                    const response = await CharacteristicsAPI.createCharacteristic(newCharacteristic)
+                    console.log(response)
+
+                    if (response.status === 201) {
+                        const characteristicProducts = {
+                            price: data.price,
+                            stock: parseFloat(data.stock),
+                            characteristic: CHARACTERISTICS_URL + "/" + response.data.id,
+                        }
+                        const lastResponse = await CharacteristicProductsAPI.createCharacteristicProduct(characteristicProducts)
+                        setCharacteristicProducts(lastResponse.data)
+                    }
+                } catch (error) {
+                    console.error(error)
+                }
             }
+        }
+
+        const newProduct = {
+            name: data.name,
+            description: data.description,
+            categories: selectedCategories.map(
+                (category) => {
+                    return CATEGORY_URL + "/" + category.value
+                }
+            ),
+            characteristicProducts: characteristicProducts.map(
+                (characteristicProduct) => {
+                    return CHARACTERISTIC_PRODUCTS_URL + "/" + characteristicProduct.id
+                }
+            )
+        }
+
+        try {
+            const response = await ProductAPI.createProduct(newProduct);
+            console.log(response)
         } catch (error) {
-            console.error(error)
+            console.error(error);
         }
     }
-
 
     const handleEdit = async (data) => {
         const originalProducts = [...products];
@@ -217,6 +290,10 @@ function AdminProductsPage() {
         setProducts(products.filter(product => product.id !== id));
         try {
             const response = await ProductAPI.deleteProduct(id);
+
+            if (response.status === 200) {
+                setShowModal(false)
+            }
         } catch (error) {
             setProducts(originalProducts);
             console.error(error);
@@ -243,8 +320,12 @@ function AdminProductsPage() {
                     formType={formType}
                     formFields={productFields}
                     formSubmit={formType === "add" ? handleAdd : handleEdit}
-                    selected={selected}
-                    setSelected={setSelected}
+                    setSelectedCategories={setSelectedCategories}
+                    selectedCategories={selectedCategories}
+                    setSelectedColor={setSelectedColor}
+                    selectedColor={selectedColor}
+                    setSelectedWeight={setSelectedWeight}
+                    selectedWeight={selectedWeight}
                 />
             </ModalAdmin>
         </AdminContainer>
