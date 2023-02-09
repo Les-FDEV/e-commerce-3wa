@@ -22,51 +22,29 @@ function Sidebar(props) {
                             <i className="fs-5 bi-speedometer2"></i><span
                             className="ms-1 d-none d-sm-inline">Dashboard</span> </a>
                     </li>
-
-                    <li className="dropdown">
-                        <a href="#" className="nav-link dropdown-toggle  text-truncate" id="dropdown"
-                           data-bs-toggle="dropdown" aria-expanded="false">
-                            <i className="fs-5 bi-bootstrap"></i><span
-                            className="ms-1 d-none d-sm-inline">Produits</span>
-                        </a>
-                        <ul className="dropdown-menu text-small shadow" aria-labelledby="dropdown">
-                            <li>
-                                <Link className="dropdown-item" to="/produits/consulter" >Consulter</Link>
-                            </li>
-                            <li><Link className="dropdown-item" to="/produits/ajouter">Ajouter</Link></li>
-                        </ul>
-                    </li>
-                    <li className="dropdown">
-                        <a href="#" className="nav-link dropdown-toggle  text-truncate" id="dropdown"
-                           data-bs-toggle="dropdown" aria-expanded="false">
-                            <i className="fs-5 bi-bootstrap"></i><span
-                            className="ms-1 d-none d-sm-inline">Catégories</span>
-                        </a>
-                        <ul className="dropdown-menu text-small shadow" aria-labelledby="dropdown">
-                            <li><a className="dropdown-item" href="#">Consulter</a></li>
-                            <li><a className="dropdown-item" href="#">Ajouter</a></li>
-                        </ul>
-                    </li>
-                    <li className="dropdown">
-                        <a href="#" className="nav-link dropdown-toggle  text-truncate" id="dropdown"
-                           data-bs-toggle="dropdown" aria-expanded="false">
-                            <i className="fs-5 bi-bootstrap"></i><span
-                            className="ms-1 d-none d-sm-inline">Caractéristiques</span>
-                        </a>
-                        <ul className="dropdown-menu text-small shadow" aria-labelledby="dropdown">
-                            <li><a className="dropdown-item" href="#">Consulter</a></li>
-                            <li><a className="dropdown-item" href="#">Ajouter</a></li>
-                        </ul>
+                    <li>
+                        <Link className="nav-link text-truncate" to="/produits">
+                            <i className="fs-5 bi-speedometer2"></i>
+                            <span className="ms-1 d-none d-sm-inline">Produits</span>
+                        </Link>
                     </li>
                     <li>
-                        <a href="#" className="nav-link text-truncate">
-                            <i className="fs-5 bi-people"></i><span className="ms-1 d-none d-sm-inline">Commandes</span>
-                        </a>
+                        <Link className="nav-link text-truncate" to="/categories">
+                            <i className="fs-5 bi-speedometer2"></i>
+                            <span className="ms-1 d-none d-sm-inline">Categories de produit</span>
+                        </Link>
                     </li>
                     <li>
-                        <a href="#" className="nav-link text-truncate">
-                            <i className="fs-5 bi-table"></i><span
-                            className="ms-1 d-none d-sm-inline">Clients</span></a>
+                        <Link className="nav-link text-truncate" to="/commandes">
+                            <i className="fs-5 bi-table"></i>
+                            <span className="ms-1 d-none d-sm-inline">Commandes</span>
+                        </Link>
+                    </li>
+                    <li>
+                        <Link className="nav-link text-truncate" to="/clients">
+                            <i className="fs-5 bi-person"></i>
+                            <span className="ms-1 d-none d-sm-inline">Clients</span>
+                        </Link>
                     </li>
                 </ul>
             </div>

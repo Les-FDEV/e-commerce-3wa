@@ -2,15 +2,34 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
 use App\Repository\PaymentRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: PaymentRepository::class)]
+#[ApiResource(
+    operations: [
+        new Get,
+        new GetCollection,
+        new Post,
+        new Put,
+        new Delete
+    ],
+    //normalizationContext: ['groups' => ['address:output']],
+    //denormalizationContext: ['groups' => ['address:input']],
+)]
 class Payment
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['order:read'])]
     private ?int $id = null;
 
     #[ORM\OneToOne(inversedBy: 'payment', cascade: ['persist', 'remove'])]
@@ -18,9 +37,11 @@ class Payment
     private ?Order $orderReference = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['order:read'])]
     private ?string $method = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['order:read'])]
     private ?string $term = null;
 
     public function getId(): ?int
