@@ -1,4 +1,4 @@
-const API_URL = 'https://localhost:8000/api';
+const API_URL = 'http://localhost:8000/api';
 
 export const PRODUCT_URL = API_URL + '/products';
 export const CATEGORY_URL = API_URL + '/categories';
