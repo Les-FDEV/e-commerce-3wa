@@ -4,35 +4,52 @@ import FormLabel from "./FormLabel";
 import FormInput from "./FormInput";
 import FormTextarea from "./FormTextarea";
 import FormSelect from "./FormSelect";
-let fin = false
-function AdminForm({formType, formFields, formSubmit, selected, setSelected}) {
-    const {register, handleSubmit, setValue} = useForm(),
-        [change, setChange] = useState(false)
+
+
+function AdminForm({
+                       formType,
+                       formFields,
+                       formSubmit,
+                       selectedWeight,
+                       setSelectedWeight,
+                       selectedColor,
+                       setSelectedColor,
+                       selectedCategories,
+                       setSelectedCategories,
+                       currentID
+                   }) {
+    const {register, handleSubmit, setValue} = useForm();
+    const [shouldFillForm, setShouldFillForm] = useState(false);
 
     useEffect(() => {
         if (formType === "edit") {
-            setTimeout(() => {
-                console.log('fin1',fin)
-                formFields.forEach(field => {
-                    if(field.value&&field.value!==""&&!fin){
-                        if (field.name !== "categories") {
-                            setValue(field.name, field.value);
-                        } else {
-                            setSelected(field.value)
-                            fin = true
-                        }
-                    }
-                })
-                console.log('fin2',fin)
-                if(!fin){
-                    setChange(!change)
-                }
-            }, 1000)
-        } else {
             formFields.forEach(field => setValue(field.name, ""));
+            setShouldFillForm(true);
+        } else {
+            setShouldFillForm(false);
         }
-    }, [formType, change]);
-    
+    }, [formType, currentID]);
+
+    useEffect(() => {
+        if (shouldFillForm) {
+            formFields.forEach(field => {
+                if (field.name !== "categories") {
+                    console.log("ok")
+                    setValue(field.name, field.value);
+                }
+                if (field.name === "categories") {
+                    setSelectedCategories(field.value)
+                }
+                if (field.name === "weight") {
+                    setSelectedWeight(field.value)
+                }
+                if (field.name === "color") {
+                    setSelectedColor(field.value)
+                }
+            });
+        }
+    }, [shouldFillForm, formFields, setValue, currentID]);
+
     const renderFormFields = () => {
         return formFields.map((field, index) => {
             switch (field.type) {

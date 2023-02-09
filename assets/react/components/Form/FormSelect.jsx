@@ -1,14 +1,22 @@
 import React from 'react';
 import {MultiSelect} from "react-multi-select-component";
+import Select from 'react-select'
 
-function FormSelect({options, selected, setSelected}) {
+function FormSelect({multiple, options, selected, setSelected}) {
     return (
-        <MultiSelect
-            options={options}
-            value={selected ? selected : []}
-            onChange={setSelected}
-            labelledBy="Select"
-        />
+        multiple ?
+            <MultiSelect
+                options={options}
+                value={selected ? selected : []}
+                onChange={setSelected}
+                labelledBy="Select"
+            />
+            :
+            <Select
+                options={options}
+                value={selected ? selected : []}
+                onChange={setSelected}
+            />
     );
 }
 
