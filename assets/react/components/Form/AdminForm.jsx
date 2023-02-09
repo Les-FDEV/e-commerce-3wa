@@ -4,34 +4,35 @@ import FormLabel from "./FormLabel";
 import FormInput from "./FormInput";
 import FormTextarea from "./FormTextarea";
 import FormSelect from "./FormSelect";
-
-function AdminForm({
-                       formType,
-                       formFields,
-                       formSubmit,
-                       selectedCategories,
-                       setSelectedCategories,
-                       selectedWeight,
-                       setSelectedWeight,
-                       selectedColor,
-                       setSelectedColor
-                   }) {
-    const {register, handleSubmit, setValue} = useForm();
+let fin = false
+function AdminForm({formType, formFields, formSubmit, selected, setSelected}) {
+    const {register, handleSubmit, setValue} = useForm(),
+        [change, setChange] = useState(false)
 
     useEffect(() => {
-        // if (formType === "edit") {
-        //     formFields.forEach(field => {
-        //         if (field.name !== "categories") {
-        //             setValue(field.name, field.value);
-        //         } else {
-        //         }
-        //     });
-        // } else {
-        //     formFields.forEach(field => setValue(field.name, ""));
-        // }
-    }, [formType, formFields, setValue]);
-
-
+        if (formType === "edit") {
+            setTimeout(() => {
+                console.log('fin1',fin)
+                formFields.forEach(field => {
+                    if(field.value&&field.value!==""&&!fin){
+                        if (field.name !== "categories") {
+                            setValue(field.name, field.value);
+                        } else {
+                            setSelected(field.value)
+                            fin = true
+                        }
+                    }
+                })
+                console.log('fin2',fin)
+                if(!fin){
+                    setChange(!change)
+                }
+            }, 1000)
+        } else {
+            formFields.forEach(field => setValue(field.name, ""));
+        }
+    }, [formType, change]);
+    
     const renderFormFields = () => {
         return formFields.map((field, index) => {
             switch (field.type) {
