@@ -2,35 +2,58 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
 use App\Repository\ProductRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
+#[ApiResource(
+    operations: [
+        new Get,
+        new GetCollection,
+        new Post,
+        new Put,
+        new Delete
+    ],
+    normalizationContext: ['groups' => ['product:read']],
+    //denormalizationContext: ['groups' => ['address:input']],
+)]
 class Product
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['product:read', 'order:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 127)]
+    #[Groups(['product:read', 'order:read'])]
     private ?string $name = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['product:read', 'order:read'])]
     private ?string $description = null;
 
-    #[ORM\OneToMany(mappedBy: 'product', targetEntity: CategoriesProduct::class)]
-    private Collection $categoriesProduct;
-
-    #[ORM\OneToMany(mappedBy: 'product', targetEntity: CharacteristicProduct::class)]
+    #[ORM\OneToMany(mappedBy: 'product', targetEntity: CharacteristicProduct::class, orphanRemoval: true)]
+    #[Groups(['product:read'])]
     private Collection $characteristicProducts;
+
+    #[ORM\ManyToMany(targetEntity: Category::class, mappedBy: 'products')]
+    #[Groups(['product:read'])]
+    private Collection $categories;
 
     public function __construct()
     {
-        $this->categoriesProduct = new ArrayCollection();
         $this->characteristicProducts = new ArrayCollection();
+        $this->categories = new ArrayCollection();
     }
     public function getId(): ?int
     {
@@ -92,30 +115,27 @@ class Product
     }
 
     /**
-     * @return Collection<int, CategoriesProduct>
+     * @return Collection<int, Category>
      */
-    public function getCategoriesProducts(): Collection
+    public function getCategories(): Collection
     {
-        return $this->categoriesProduct;
+        return $this->categories;
     }
 
-    public function addCategoryProduct(CategoriesProduct $categoryProduct): self
+    public function addCategory(Category $category): self
     {
-        if (!$this->categoriesProduct->contains($categoryProduct)) {
-            $this->categoriesProduct->add($categoryProduct);
-            $categoryProduct->setProduct($this);
+        if (!$this->categories->contains($category)) {
+            $this->categories->add($category);
+            $category->addProduct($this);
         }
 
         return $this;
     }
 
-    public function removeCategoryProduct(CategoriesProduct $categoryProduct): self
+    public function removeCategory(Category $category): self
     {
-        if ($this->categoriesProduct->removeElement($categoryProduct)) {
-            // set the owning side to null (unless already changed)
-            if ($categoryProduct->getProduct() === $this) {
-                $categoryProduct->setProduct(null);
-            }
+        if ($this->categories->removeElement($category)) {
+            $category->removeProduct($this);
         }
 
         return $this;

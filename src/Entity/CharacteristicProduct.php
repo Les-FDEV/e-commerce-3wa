@@ -2,28 +2,48 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
 use App\Repository\CharacteristicProductRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: CharacteristicProductRepository::class)]
+#[ApiResource(
+    operations: [
+        new Get,
+        new Post,
+        new Put,
+        new Delete
+    ],
+    //normalizationContext: ['groups' => ['address:output']],
+    //denormalizationContext: ['groups' => ['address:input']],
+)]
 class CharacteristicProduct
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['product:read'])]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'characteristicProducts')]
+    #[ORM\ManyToOne(inversedBy: 'characteristicProduct')]
     private ?Product $product = null;
 
-    #[ORM\ManyToOne(inversedBy: 'characteristicProducts')]
+    #[ORM\ManyToOne(inversedBy: 'characteristicProduct')]
     private ?Characteristic $characteristic = null;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 5, scale: 2)]
+    #[Groups(['product:read'])]
     private ?string $price = null;
 
     #[ORM\Column]
+    #[Groups(['product:read'])]
     private ?int $stock = null;
 
     public function getId(): ?int

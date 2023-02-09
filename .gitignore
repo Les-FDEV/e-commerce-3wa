@@ -2,6 +2,7 @@
 ###> symfony/framework-bundle ###
 /.idea/
 /.env.local.php
+/.env.local
 /.env.*.local
 /composer.lock
 /composer.lock.json
@@ -10,6 +11,7 @@
 /var/
 /vendor/
 /migrations/
+.env.local
 ###< symfony/framework-bundle ###
 
 ###> phpunit/phpunit ###

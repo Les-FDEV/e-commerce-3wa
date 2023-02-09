@@ -2,43 +2,74 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
 use App\Repository\OrderRepository;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: OrderRepository::class)]
 #[ORM\Table(name: '`order`')]
+#[ApiResource(
+    operations: [
+        new Get,
+        new GetCollection,
+        new Post,
+        new Put,
+        new Delete
+    ],
+    normalizationContext: ['groups' => ['order:read']],
+)]
 class Order
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['order:read'])]
     private ?int $id = null;
 
-    #[ORM\Column]
+    #[Groups(['order:read'])]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTime $created_at = null;
 
-    #[ORM\Column(type: 'datetime', nullable: true)]
+    #[Groups(['order:read'])]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTime $confirmed_at = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['order:read'])]
     private ?string $statut = null;
 
     #[ORM\ManyToOne(inversedBy: 'orders')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
+    #[Groups(['order:read'])]
     private ?User $user = null;
 
     #[ORM\OneToMany(mappedBy: 'orderReference', targetEntity: OrderProducts::class, orphanRemoval: true)]
+    #[ORM\JoinColumn(nullable: true)]
+    #[Groups(['order:read'])]
     private Collection $orderProducts;
 
     #[ORM\OneToOne(mappedBy: 'orderReference', cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(nullable: true)]
+    #[Groups(['order:read'])]
     private ?Payment $payment = null;
 
     #[ORM\ManyToOne(inversedBy: 'orderReference')]
     #[ORM\JoinColumn(nullable: true)]
+    #[Groups(['order:read'])]
     private ?Shipping $shipping = null;
+
+    #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2, nullable: true)]
+    private ?string $Total = null;
 
     public function __construct()
     {
@@ -153,6 +184,18 @@ class Order
     public function setShipping(?Shipping $shipping): self
     {
         $this->shipping = $shipping;
+
+        return $this;
+    }
+
+    public function getTotal(): ?string
+    {
+        return $this->Total;
+    }
+
+    public function setTotal(?string $Total): self
+    {
+        $this->Total = $Total;
 
         return $this;
     }
