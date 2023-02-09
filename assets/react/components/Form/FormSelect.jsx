@@ -5,7 +5,7 @@ function FormSelect({options, selected, setSelected}) {
     return (
         <MultiSelect
             options={options}
-            // value={selected}
+            value={selected ? selected : []}
             onChange={setSelected}
             labelledBy="Select"
         />

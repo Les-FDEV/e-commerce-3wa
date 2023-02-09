@@ -1,30 +1,43 @@
-import React, { useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useForm} from "react-hook-form";
 import FormLabel from "./FormLabel";
 import FormInput from "./FormInput";
 import FormTextarea from "./FormTextarea";
 import FormSelect from "./FormSelect";
+let fin = false
 
 function AdminForm({formType, formFields, formSubmit, selected, setSelected}) {
-    const {register, handleSubmit, setValue} = useForm();
+    const {register, handleSubmit, setValue} = useForm(),
+        [change, setChange] = useState(false)
 
     useEffect(() => {
         if (formType === "edit") {
-            formFields.forEach(field => {
-                if (field.name !== "categories") {
-                    setValue(field.name, field.value);
-                } else {
-                    setSelected(field.value)
+            setTimeout(() => {
+                console.log('fin1',fin)
+                formFields.forEach(field => {
+                    if(field.value&&field.value!==""&&!fin){
+                        if (field.name !== "categories") {
+                            setValue(field.name, field.value);
+                        } else {
+                            setSelected(field.value)
+                            fin = true
+                        }
+                    }
+                })
+                console.log('fin2',fin)
+                if(!fin){
+                    setChange(!change)
                 }
-            });
+            }, 1000)
         } else {
             formFields.forEach(field => setValue(field.name, ""));
         }
-    }, [formType, formFields, setValue]);
+    }, [formType, change]);
 
 
 
     useEffect(() => {
+        //console.log(selected)
     }, [selected])
 
     const renderFormFields = () => {
