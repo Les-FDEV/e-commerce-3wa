@@ -24,6 +24,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
         new Delete
     ],
     normalizationContext: ['groups' => ['product:read']],
+    order: ['id' => 'DESC'],
     //denormalizationContext: ['groups' => ['address:input']],
 )]
 class Product

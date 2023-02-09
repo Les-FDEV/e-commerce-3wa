@@ -9,13 +9,12 @@ import ButtonModal from "../components/Modal/ButtonModal";
 import CharacteristicsAPI from "../services/CharacteristicsAPI";
 import {CATEGORY_PRODUCTS_URL, CATEGORY_URL, CHARACTERISTIC_PRODUCTS_URL, CHARACTERISTICS_URL} from "../config/config";
 import CharacteristicProductsAPI from "../services/CharacteristicProductsAPI";
-import {toast} from "react-toastify";
+import {toast, ToastContainer} from "react-toastify";
 
 function AdminProductsPage() {
     const [products, setProducts] = useState([]);
     const [product, setProduct] = useState({});
     const [categories, setCategories] = useState([]);
-    const [characteristicProducts, setCharacteristicProducts] = useState([]);
     const [tableData, setTableData] = useState([]);
     const [formType, setFormType] = useState("add");
     const [showModal, setShowModal] = useState(false);
@@ -171,7 +170,17 @@ function AdminProductsPage() {
                 {label: "2kg à 3kg", value: "2kg à 3kg", ormValue: "weight"},
                 {label: "plus de 3kg", value: "plus de 3kg", ormValue: "weight"}
             ],
-            value: product.characteristicProducts ? product.characteristicProducts[0].weight : '',
+            value: product.characteristicProducts ?
+                product.characteristicProducts.map((characteristicProduct) =>
+                    characteristicProduct.characteristic.name === "weight" ? (
+                        {
+                            label: characteristicProduct.characteristic.value,
+                            value: characteristicProduct.characteristic.id,
+                            ormValue: "weight"
+                        }
+                    ) : null)
+                : null,
+            multiple: false,
         },
         {
             id: 6,
@@ -192,6 +201,17 @@ function AdminProductsPage() {
                 {label: "Marron", value: "Marron", ormValue: "color"},
                 {label: "Autre", value: "Autre", ormValue: "color"}
             ],
+            value: product.characteristicProducts ?
+                product.characteristicProducts.map((characteristicProduct) =>
+                    characteristicProduct.characteristic.name === "color" ? (
+                        {
+                            label: characteristicProduct.characteristic.value,
+                            value: characteristicProduct.characteristic.id,
+                            ormValue: "color"
+                        }
+                    ) : null)
+                : null,
+            multiple: false,
         },
         {
             id: 5,
@@ -215,28 +235,27 @@ function AdminProductsPage() {
             selectedWeight,
         ]
 
+        let characteristicProducts = [];
         for (const characteristic of characteristics) {
-            for (const [key, value] of Object.entries(characteristic)) {
-                const newCharacteristic = {
-                    name: value.ormValue,
-                    value: value.value,
-                }
-                try {
-                    const response = await CharacteristicsAPI.createCharacteristic(newCharacteristic)
-                    console.log(response)
+            console.log(characteristic)
+            const newCharacteristic = {
+                name: characteristic.ormValue,
+                value: characteristic.value,
+            }
+            try {
+                const response = await CharacteristicsAPI.createCharacteristic(newCharacteristic)
 
-                    if (response.status === 201) {
-                        const characteristicProducts = {
-                            price: data.price,
-                            stock: parseFloat(data.stock),
-                            characteristic: CHARACTERISTICS_URL + "/" + response.data.id,
-                        }
-                        const lastResponse = await CharacteristicProductsAPI.createCharacteristicProduct(characteristicProducts)
-                        setCharacteristicProducts(lastResponse.data)
+                if (response.status === 201) {
+                    const newCharacteristicProducts = {
+                        price: data.price,
+                        stock: parseFloat(data.stock),
+                        characteristic: CHARACTERISTICS_URL + "/" + response.data.id,
                     }
-                } catch (error) {
-                    console.error(error)
+                    const lastResponse = await CharacteristicProductsAPI.createCharacteristicProduct(newCharacteristicProducts)
+                    characteristicProducts.push(lastResponse.data)
                 }
+            } catch (error) {
+                console.error(error)
             }
         }
 
@@ -255,29 +274,86 @@ function AdminProductsPage() {
             )
         }
 
+
         try {
             const response = await ProductAPI.createProduct(newProduct);
+
             console.log(response)
+
+            if (response.status === 201) {
+                setProducts([response.data, ...products]);
+                toast.success("Le produit a bien été ajouté")
+                setShowModal(false)
+            }
         } catch (error) {
             console.error(error);
         }
     }
 
+
     const handleEdit = async (data) => {
-        const originalProducts = [...products];
-        const index = products.findIndex(product => product.id === data.id);
-        const newProducts = [...products];
-        newProducts[index] = data;
-        setProducts(newProducts);
+        console.log(data)
+        console.log(selectedCategories)
+        console.log(selectedColor)
+        console.log(selectedWeight)
+
+        //verify if characteristic has been changed
+        const characteristics = [
+            selectedColor,
+            selectedWeight,
+        ]
+
+        let characteristicProducts = [];
+        for (const characteristic of characteristics) {
+            console.log(characteristic)
+            const newCharacteristic = {
+                name: characteristic.ormValue,
+                value: characteristic.value,
+            }
+            try {
+                const response = await CharacteristicsAPI.createCharacteristic(newCharacteristic)
+
+                if (response.status === 201) {
+                    const updateCharacteristicProducts = {
+                        price: data.price,
+                        stock: parseFloat(data.stock),
+                        characteristic: CHARACTERISTICS_URL + "/" + response.data.id,
+                    }
+                    const lastResponse = await CharacteristicProductsAPI.createCharacteristicProduct(updateCharacteristicProducts)
+                    characteristicProducts.push(lastResponse.data)
+                }
+            } catch (error) {
+                console.error(error)
+            }
+        }
+
+        const updateProduct = {
+            name: data.name,
+            description: data.description,
+            categories: selectedCategories.map(
+                (category) => {
+                    return CATEGORY_URL + "/" + category.value
+                }
+            ),
+            characteristicProducts: characteristicProducts.map(
+                (characteristicProduct) => {
+                    return CHARACTERISTIC_PRODUCTS_URL + "/" + characteristicProduct.id
+                }
+            )
+        }
+
         try {
-            const response = await ProductAPI.updateProduct(data);
+            const response = await ProductAPI.updateProduct(data.id, updateProduct);
 
             if (response.status === 200) {
+                const originalProducts = [...products];
+                const index = originalProducts.findIndex(product => product.id === data.id);
+                originalProducts[index] = response.data;
+                setProducts(originalProducts);
+                toast.success("Le produit a bien été modifié")
                 setShowModal(false)
-
             }
         } catch (error) {
-            setProducts(originalProducts);
             console.error(error);
         }
     }
@@ -291,8 +367,8 @@ function AdminProductsPage() {
         try {
             const response = await ProductAPI.deleteProduct(id);
 
-            if (response.status === 200) {
-                setShowModal(false)
+            if (response.status === 204) {
+                toast.success("Le produit a bien été supprimé")
             }
         } catch (error) {
             setProducts(originalProducts);
@@ -326,8 +402,10 @@ function AdminProductsPage() {
                     selectedColor={selectedColor}
                     setSelectedWeight={setSelectedWeight}
                     selectedWeight={selectedWeight}
+                    currentID={currentProductID}
                 />
             </ModalAdmin>
+            <ToastContainer/>
         </AdminContainer>
     );
 }
