@@ -15,40 +15,38 @@ function AdminForm({
                        selectedColor,
                        setSelectedColor,
                        selectedCategories,
-                       setSelectedCategories,
-                       currentID
+                       setSelectedCategories
                    }) {
-    const {register, handleSubmit, setValue} = useForm();
-    const [shouldFillForm, setShouldFillForm] = useState(false);
+    const {register, handleSubmit, setValue} = useForm(),
+        [change, setChange] = useState(false)
+    let fin = false
 
     useEffect(() => {
         if (formType === "edit") {
-            formFields.forEach(field => setValue(field.name, ""));
-            setShouldFillForm(true);
-        } else {
-            setShouldFillForm(false);
-        }
-    }, [formType, currentID]);
-
-    useEffect(() => {
-        if (shouldFillForm) {
+            console.log('fin1', fin)
             formFields.forEach(field => {
-                if (field.name !== "categories") {
-                    console.log("ok")
-                    setValue(field.name, field.value);
+                if(field.value&&field.value!==""&&!fin){
+                    if (field.name !== "categories" && field.name !== "weight"  && field.name !== "color") {
+                        setValue(field.name, field.value);
+                    }
+                    else {
+                        if (field.name === "categories") {
+                            setSelectedCategories(field.value)
+                            fin = true
+                        }
+                        if (field.name === "weight") {
+                            setSelectedWeight(field.value)
+                        }
+                        if (field.name === "color") {
+                            setSelectedColor(field.value)
+                        }
+                    }
                 }
-                if (field.name === "categories") {
-                    setSelectedCategories(field.value)
-                }
-                if (field.name === "weight") {
-                    setSelectedWeight(field.value)
-                }
-                if (field.name === "color") {
-                    setSelectedColor(field.value)
-                }
-            });
+            })
+            if(!fin) setChange(!change)
+            console.log('fin2', fin)
         }
-    }, [shouldFillForm, formFields, setValue, currentID]);
+    }, [formType, change]);
 
     const renderFormFields = () => {
         return formFields.map((field, index) => {
