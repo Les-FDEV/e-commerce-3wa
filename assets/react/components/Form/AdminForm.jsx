@@ -1,12 +1,31 @@
-import React from 'react';
+import React, { useEffect} from 'react';
 import {useForm} from "react-hook-form";
 import FormLabel from "./FormLabel";
 import FormInput from "./FormInput";
 import FormTextarea from "./FormTextarea";
 import FormSelect from "./FormSelect";
 
-function AdminForm({formType, formFields, formSubmit}) {
-    const {register, handleSubmit} = useForm();
+function AdminForm({formType, formFields, formSubmit, selected, setSelected}) {
+    const {register, handleSubmit, setValue} = useForm();
+
+    useEffect(() => {
+        if (formType === "edit") {
+            formFields.forEach(field => {
+                if (field.name !== "categories") {
+                    setValue(field.name, field.value);
+                } else {
+                    setSelected(field.value)
+                }
+            });
+        } else {
+            formFields.forEach(field => setValue(field.name, ""));
+        }
+    }, [formType, formFields, setValue]);
+
+
+
+    useEffect(() => {
+    }, [selected])
 
     const renderFormFields = () => {
         return formFields.map((field, index) => {
@@ -23,7 +42,6 @@ function AdminForm({formType, formFields, formSubmit}) {
                                 name={field.name}
                                 id={field.name}
                                 placeholder={field.placeholder}
-                                value={field.value}
                                 register={register}
                                 required={true}
                             />
@@ -40,7 +58,6 @@ function AdminForm({formType, formFields, formSubmit}) {
                                 name={field.name}
                                 id={field.name}
                                 placeholder={field.placeholder}
-                                value={field.value}
                                 register={register}
                                 required={true}
                             />
@@ -55,7 +72,6 @@ function AdminForm({formType, formFields, formSubmit}) {
                                 step="0.01"
                                 name={field.name}
                                 id={field.name}
-                                value={field.value}
                                 register={register}
                                 required={true}
                             />
@@ -66,13 +82,9 @@ function AdminForm({formType, formFields, formSubmit}) {
                         <div className="mb-3" key={index}>
                             <FormLabel htmlFor={field.name} label={field.label}/>
                             <FormSelect
-                                name={field.name}
                                 options={field.options}
-                                register={register}
-                                required={true}
-                                value={field.value}
-                                defaultValue={field.defaultValue}
-                                multiple={field.multiple}
+                                selected={selected}
+                                setSelected={setSelected}
                             />
                         </div>
                     );

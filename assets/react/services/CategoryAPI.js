@@ -24,7 +24,6 @@ const updateCategory = (id, category) => {
 const deleteCategory = (id) => {
     return axios.delete(CATEGORY_URL + "/" + id)
         .then(response => response)
-        .catch(error => console.log(error));
 }
 
 export default {

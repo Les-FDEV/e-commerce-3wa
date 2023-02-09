@@ -1,6 +1,6 @@
 import React from 'react';
 
-function FormInput({type, step, name, placeholder, value, register, required}) {
+function FormInput({type, step, name, placeholder, register, required}) {
     return (
         <input
             type={type}
@@ -14,7 +14,6 @@ function FormInput({type, step, name, placeholder, value, register, required}) {
                 }
             )}
             placeholder={placeholder}
-            value={value}
         />
     );
 }

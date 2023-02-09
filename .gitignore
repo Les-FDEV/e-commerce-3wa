@@ -6,6 +6,7 @@
 /.env.*.local
 /composer.lock
 /composer.lock.json
+/package-lock.json
 /config/secrets/prod/prod.decrypt.private.php
 /public/bundles/
 /var/
