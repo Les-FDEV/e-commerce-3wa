@@ -11,7 +11,6 @@ function FormTextarea({name, placeholder, value, register}) {
                 {required: true}
             )}
             placeholder={placeholder}
-            value={value}
         >
         </textarea>
     );

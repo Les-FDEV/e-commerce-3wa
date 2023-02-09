@@ -15,6 +15,7 @@ function AdminProductsPage() {
     const [formType, setFormType] = useState("add");
     const [showModal, setShowModal] = useState(false);
     const [currentProductID, setCurrentProductID] = useState(null);
+    const [selected, setSelected] = useState([]);
 
     // Le code pour remplir le tableau de data
 
@@ -28,7 +29,6 @@ function AdminProductsPage() {
 
     const getDataTable = () => {
         if (products) {
-            console.log(products)
             return products.map((product, index) => (
                     [
                         {value: index + 1},
@@ -166,14 +166,13 @@ function AdminProductsPage() {
             label: 'Catégories',
             type: 'select',
             options: categories.map((category) => (
-                {id: category.id, name: category.name}
+                {label: category.name, value: category.id}
             )),
             value: product.categories ? product.categories.map((category) => (
-                {id: category.id, name: category.name}
+                {label: category.name, value: category.id}
             )) : null,
             defaultValue: "Veuillez saisir une ou plusieurs catégories",
             multiple: true,
-
         },
     ];
 
@@ -244,6 +243,8 @@ function AdminProductsPage() {
                     formType={formType}
                     formFields={productFields}
                     formSubmit={formType === "add" ? handleAdd : handleEdit}
+                    selected={selected}
+                    setSelected={setSelected}
                 />
             </ModalAdmin>
         </AdminContainer>

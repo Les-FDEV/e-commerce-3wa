@@ -5,7 +5,9 @@ import AdminContainer from "../components/Container/AdminContainer";
 import ButtonModal from "../components/Modal/ButtonModal";
 import ModalAdmin from "../components/Modal/ModalAdmin";
 import AdminForm from "../components/Form/AdminForm";
-import {ToastContainer} from "react-toastify";
+import {toast, ToastContainer} from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
+
 
 function AdminCategoriesPage(props) {
     const [categories, setCategories] = useState([]);
@@ -15,7 +17,18 @@ function AdminCategoriesPage(props) {
     const [showModal, setShowModal] = useState(false);
     const [currentCategoryID, setCurrentCategoryID] = useState(null);
 
-    // const
+    const notify = (message) => toast.success(
+        message,
+        {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+        }
+    );
 
     const tableHeader = [
         {id: 1, name: '#'},
@@ -94,6 +107,7 @@ function AdminCategoriesPage(props) {
         }
     }, [currentCategoryID])
 
+
     const categoryFields = [
         {
             id: 1,
@@ -101,7 +115,7 @@ function AdminCategoriesPage(props) {
             label: "Nom de la catégorie",
             type: "text",
             placeholder: "Nom de la catégorie",
-            value: category.name ?? undefined
+            value: category.name ?? ""
         },
         {
             id: 2,
@@ -109,7 +123,7 @@ function AdminCategoriesPage(props) {
             label: "Description",
             type: "textarea",
             placeholder: "Description de la catégorie",
-            value: category.description ?? undefined
+            value: category.description ?? ""
         },
     ];
 
@@ -117,24 +131,39 @@ function AdminCategoriesPage(props) {
         try {
             const response = await CategoryAPI.createCategory(data);
             if (response.status === 201) {
-                console.log(response.data)
                 setCategories([response.data, ...categories]);
                 setShowModal(false);
+                notify("La catégorie a bien été ajoutée")
             }
         } catch (error) {
             console.error(error)
         }
     }
 
-    const handleEdit = (data) => {
-        console.log(data)
+    const handleEdit = async (data) => {
+        try {
+            const response = await CategoryAPI.updateCategory(currentCategoryID, data);
+            console.log(response)
+            if (response.status === 200) {
+                setCategories(categories.map(category => category.id === currentCategoryID ? response.data : category));
+                setShowModal(false);
+                notify("La catégorie a bien été modifiée")
+            }
+        } catch (error) {
+            console.error(error)
+        }
     }
 
-    const handleDelete = (id) => {
+    const handleDelete = async (id) => {
         const originalCategories = [...categories];
         setCategories(categories.filter(category => category.id !== id));
         try {
-            CategoryAPI.deleteCategory(id);
+            const {status} = await CategoryAPI.deleteCategory(id);
+            console.log(status)
+            if (status === 204) {
+                console.log("La catégorie a bien été supprimée")
+                notify("La catégorie a bien été supprimée")
+            }
         } catch (error) {
             setCategories(originalCategories);
             console.error(error)
@@ -165,8 +194,8 @@ function AdminCategoriesPage(props) {
                         />
                     </ModalAdmin>
                 )}
+                <ToastContainer/>
             </AdminContainer>
-            <ToastContainer/>
         </>
     );
 }

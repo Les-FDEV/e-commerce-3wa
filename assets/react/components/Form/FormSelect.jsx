@@ -1,35 +1,14 @@
 import React from 'react';
+import { MultiSelect } from "react-multi-select-component";
 
-function FormSelect({name,multiple, options, register, required, value, defaultValue}) {
+function FormSelect({options, selected, setSelected}) {
     return (
-        <select
-            className="form-select"
-            multiple={multiple}
-            {...register(
-                name,
-                {required: required}
-            )}
-        >
-            {!value &&
-                <>
-                    <option value="">{defaultValue}</option>
-                    {options.map((option, index) => (
-                        <option key={index} value={option.id}>{option.name}</option>
-                    ))}
-                </>
-            }
-            {value &&
-                options.map((option, index) => (
-                    <option
-                        key={index}
-                        value={option.id}
-                        selected={value.some(v => v.id === option.id)}
-                    >
-                        {option.name}
-                    </option>
-                ))
-            }
-        </select>
+        <MultiSelect
+            options={options}
+            // value={selected}
+            onChange={setSelected}
+            labelledBy="Select"
+        />
     );
 }
 
