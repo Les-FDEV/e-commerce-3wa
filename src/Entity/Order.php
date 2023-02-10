@@ -27,7 +27,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
         new Delete
     ],
     normalizationContext: ['groups' => ['order:read']],
-    paginationItemsPerPage: 5,
+    paginationItemsPerPage: 20,
 )]
 class Order
 {
