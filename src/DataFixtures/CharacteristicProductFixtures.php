@@ -18,7 +18,7 @@ class CharacteristicProductFixtures extends Fixture implements DependentFixtureI
             $carProduct = new CharacteristicProduct;
             $product = $this->getReference('product'.$i);
             for($j = 0; $j < $faker->numberBetween(1,5); $j++){
-                $caracteristic = $this->getReference('characteristic'.$faker->numberBetween(0, 29));
+                $caracteristic = $this->getReference('characteristic'.$faker->numberBetween(0, 16));
                 $carProduct->setCharacteristic($caracteristic);
                 $carProduct->setProduct($product)
                     ->setPrice($faker->randomFloat(4))

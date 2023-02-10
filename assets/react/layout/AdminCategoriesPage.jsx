@@ -1,4 +1,4 @@
-import React, {useEffect,  useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import Table from "../components/Table/Table";
 import CategoryAPI from "../services/CategoryAPI";
 import AdminContainer from "../components/Container/AdminContainer";
@@ -9,16 +9,19 @@ import {toast, ToastContainer} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import OrderAPI from "../services/OrderAPI";
 import Pagination from "../components/Pagination/Pagination";
+import SearchForm from "../components/Form/SearchForm";
 
 
 function AdminCategoriesPage(props) {
     const [categories, setCategories] = useState([]);
+    const [filteredCategories, setFilteredCategories] = useState([]);
     const [category, setCategory] = useState({});
     const [pageList, setPageList] = useState([]);
     const [tableData, setTableData] = useState([]);
     const [formType, setFormType] = useState("add");
     const [showModal, setShowModal] = useState(false);
     const [currentCategoryID, setCurrentCategoryID] = useState(null);
+    const [search, setSearch] = useState("");
 
     const notify = (message) => toast.success(
         message,
@@ -42,7 +45,7 @@ function AdminCategoriesPage(props) {
 
     const getDataTable = () => {
         if (categories) {
-            return categories.map((category) => (
+            return filteredCategories.map((category) => (
                     [
                         {value: category.id},
                         {value: category.name},
@@ -81,6 +84,7 @@ function AdminCategoriesPage(props) {
             const data = await CategoryAPI.getAllCategories();
             console.log(data)
             setCategories(data['hydra:member']);
+            setFilteredCategories(data['hydra:member']);
             setPageList(data['hydra:view']);
         } catch (error) {
             console.error(error)
@@ -104,7 +108,7 @@ function AdminCategoriesPage(props) {
     useEffect(() => {
         console.log(categories)
         setTableData(getDataTable());
-    }, [categories]);
+    }, [filteredCategories]);
 
     useEffect(() => {
         if (formType === "edit") {
@@ -185,6 +189,23 @@ function AdminCategoriesPage(props) {
         }
     }
 
+    const handleSearch = () => {
+        const originalCategories = [...categories];
+        if (!search.length > 3 || search.length === 0) {
+            setCategories(originalCategories);
+            return;
+        }
+        setFilteredCategories(
+            categories.filter(
+                category => category.name.toLowerCase().includes(search.toLowerCase())
+            )
+        )
+    }
+
+    useEffect(() => {
+        handleSearch()
+    }, [search])
+
     return (
         <>
             <AdminContainer title="Gestion des catégories">
@@ -192,6 +213,11 @@ function AdminCategoriesPage(props) {
                     buttonLabel="Ajouter une catégorie"
                     setFormType={setFormType}
                     setShowModal={setShowModal}
+                />
+                <SearchForm
+                    search={search}
+                    setSearch={setSearch}
+                    handleSearch={handleSearch}
                 />
                 <Pagination
                     pages={pageList}

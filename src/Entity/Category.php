@@ -24,7 +24,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
         new Delete
     ],
     order: ['id' => 'DESC'],
-    paginationItemsPerPage: 5,
+    paginationItemsPerPage: 10,
     //denormalizationContext: ['groups' => ['address:input']],
 )]
 class Category
