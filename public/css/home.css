@@ -146,6 +146,7 @@ nav ul li a:hover {
 .container {
   width: 68%;
   margin: 0 auto;
+  height: 70vh;
 }
 .container h2 {
   margin-top: 50px;
@@ -246,6 +247,61 @@ nav ul li a:hover {
 }
 .footer .footer-product .laptop {
   width: 18%;
+}
+
+.skin {
+  height: 350px;
+}
+.skin h1 {
+  color: #15161C;
+  margin: 0;
+  position: relative;
+  margin-bottom: 15px;
+  margin-top: 15px;
+  text-transform: uppercase;
+}
+.skin h1::after {
+  position: absolute;
+  content: "";
+  width: 131px;
+  height: 3px;
+  background-color: #D11F25;
+  bottom: 0px;
+  left: 0px;
+}
+.skin .product {
+  width: 25%;
+  text-align: center;
+  background-color: #15161C;
+  margin-top: 25px;
+}
+.skin h5 {
+  background-color: #D11F25;
+  padding: 8px;
+  font-size: 27px;
+  text-transform: uppercase;
+  color: white;
+}
+.skin h6 {
+  color: white;
+  padding: 5px;
+}
+.skin h6 strong {
+  position: relative;
+  margin-bottom: 15px;
+}
+.skin h6 strong::after {
+  position: absolute;
+  content: "";
+  width: 49px;
+  height: 3px;
+  background-color: #D11F25;
+  bottom: -11px;
+  left: 18px;
+}
+.skin p {
+  color: white;
+  padding: 5px;
 }
 
 /*# sourceMappingURL=home.css.map */

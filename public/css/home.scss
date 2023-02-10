@@ -156,6 +156,8 @@ nav{
 .container{
   width: 68%;
   margin: 0 auto;
+  height:70vh;
+
   h2{
     margin-top: 50px;
     text-transform: uppercase;
@@ -262,3 +264,59 @@ nav{
   }
 }
 
+.skin{
+  height:350px;
+  h1{
+    color: $color3;
+    margin: 0;
+    position: relative;
+    margin-bottom: 15px;
+    margin-top: 15px;
+    text-transform: uppercase;
+    &::after{
+      position: absolute;
+      content: "";
+      width: 131px;
+      height: 3px;
+      background-color: #D11F25;
+      bottom: 0px;
+      left: 0px;
+    }
+  }
+  .product{
+    width: 25%;
+    text-align: center;
+    background-color: $color3;
+    margin-top: 25px;
+
+  }
+  h5{
+    background-color: $color2;
+    padding: 8px;
+    font-size: 27px;
+    text-transform: uppercase;
+    color: white;
+  }
+  h6{
+    color: white;
+    padding: 5px;
+    strong{
+      position: relative;
+      margin-bottom: 15px;
+      &::after{
+        position: absolute;
+        content: "";
+        width: 49px;
+        height: 3px;
+        background-color: #D11F25;
+        bottom: -11px;
+        left: 18px;
+      }
+    }
+  }
+  p{
+    color: white;
+    padding: 5px;
+  }
+
+}
