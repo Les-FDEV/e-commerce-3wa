@@ -9,8 +9,6 @@ export default function CheckoutForm( props ) {
     const stripe = useStripe();
     const elements = useElements();
 
-    console.log(elements)
-
     const [message, setMessage] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
 
@@ -72,7 +70,9 @@ export default function CheckoutForm( props ) {
 
             if(paymentIntent){
 
-                console.log('PAIMENT FONCTIONNE')
+                const orderForm = document.querySelector('#_orderInformations')
+
+                orderForm.submit()
 
             }
 

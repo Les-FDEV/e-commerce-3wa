@@ -15,7 +15,6 @@ class HomeController extends AbstractController
     #[Route('/', name: 'app_home')]
     public function index(ProductRepository $productRepository, CategoryRepository $categoryRepository, Request $request): Response
     {
-
         if ($request->isXMLHttpRequest()) {
 
             $id = $request->get('value');

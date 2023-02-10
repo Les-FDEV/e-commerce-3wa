@@ -37,11 +37,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups(['order:read'])]
     private ?int $id = null;
 
-    #[ORM\Column(length: 180, unique: true)]
+    #[ORM\Column(length: 31, unique: true)]
     #[Groups(['order:read'])]
     private ?string $email = null;
 
-    #[ORM\Column]
+    #[ORM\Column(length: 31, unique: true)]
     private array $roles = [];
 
     /**
@@ -50,15 +50,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $password = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 63)]
     #[Groups(['order:read'])]
     private ?string $firstname = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 63)]
     #[Groups(['order:read'])]
     private ?string $lastname = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 63)]
     #[Groups(['order:read'])]
     private ?string $phoneNumber = null;
 
