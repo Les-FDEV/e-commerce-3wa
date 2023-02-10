@@ -28,7 +28,6 @@ use Symfony\Component\Serializer\Annotation\Groups;
     ],
     normalizationContext: ['groups' => ['user:read']],
     paginationItemsPerPage: 10,
-    //denormalizationContext: ['groups' => ['address:input']],
 )]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -38,11 +37,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups(['order:read', 'address:read', 'user:read'])]
     private ?int $id = null;
 
-    #[ORM\Column(length: 180, unique: true)]
+    #[ORM\Column(length: 31, unique: true)]
     #[Groups(['order:read', 'address:read', 'user:read'])]
     private ?string $email = null;
 
-    #[ORM\Column]
+    #[ORM\Column(length: 31, unique: true)]
     private array $roles = [];
 
     /**
@@ -51,24 +50,24 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $password = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 63)]
     #[Groups(['order:read', 'address:read', 'user:read'])]
     private ?string $firstname = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 63)]
     #[Groups(['order:read', 'address:read', 'user:read'])]
     private ?string $lastname = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 63)]
     #[Groups(['order:read', 'address:read', 'user:read'])]
     private ?string $phoneNumber = null;
 
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Address::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Address::class)]
     #[Groups(['order:read', 'address:read', 'user:read'])]
     private Collection $addresses;
 
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Order::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
-    #[Groups(['address:read', 'user:read'])]
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Order::class)]
+    #[Groups(['order:read', 'address:read', 'user:read'])]
     private Collection $orders;
 
     public function __construct()

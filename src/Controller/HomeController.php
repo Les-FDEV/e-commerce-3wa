@@ -5,20 +5,28 @@ namespace App\Controller;
 use App\Repository\CategoryRepository;
 use App\Repository\ProductRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class HomeController extends AbstractController
 {
     #[Route('/', name: 'app_home')]
-    public function index(ProductRepository $productRepository, CategoryRepository $categoryRepository): Response
+    public function index(ProductRepository $productRepository, CategoryRepository $categoryRepository, Request $request): Response
     {
-        $products = $productRepository->findBy(array(),array('id' => 'DESC'),5 );
-        $id = rand(530,1600);
-        $productsRand = $productRepository->find($id);
-        if ($productsRand == null){
-            $productsRand = $productRepository->find(515);
+        if ($request->isXMLHttpRequest()) {
+
+            $id = $request->get('value');
+
+            $query = $productRepository->findByExampleField($id);
+
+            return $this->json($query);
         }
+
+        $products = $productRepository->findBy(array(),array('id' => 'DESC'),5 );
+
+        $productsRand = $productRepository->findBy(array(),array('id' => 'DESC'),1 );
 
         $categs = $categoryRepository->findAll();
 
