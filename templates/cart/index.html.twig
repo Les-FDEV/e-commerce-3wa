@@ -1,17 +1,21 @@
 {% extends 'base.html.twig' %}
 
-{% block body %}
+{% block title 'FDEV - Panier' %}
 
+{% block body %}
     <div class="container">
 
-        <div  {{ react_component('AddProductInCartController',{ id : 1}) }} > </div >
-        <div  {{ react_component('AddProductInCartController',{ id : 2}) }} > </div >
-        <div  {{ react_component('AddProductInCartController',{ id : 3}) }} > </div >
-        <div  {{ react_component('AddProductInCartController',{ id : 4}) }} > </div >
+        <h2>Panier</h2>
+        <hr />
 
-    </div>
+        <div  {{ react_component('CartController') }} > </div >
 
 
-    <div  {{ react_component('CartController') }} > </div >
+    <form id="cart_form_price" method="post" action="{{ path('app_checkout' ) }}" >
+        <input type="hidden" name="_token" value="{{ csrf_token('payment') }}">
+        <input id="order_price_input" type="hidden" name="_price" >
+    </form>
 
+
+    <div>
 {% endblock %}

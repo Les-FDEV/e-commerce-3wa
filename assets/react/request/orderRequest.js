@@ -46,7 +46,21 @@ export const deleteProductInCart = (id) => {
     db.table('product').delete(id)
 }
 
-export const getDetailsProduct = (id) => {
+export const resetCart = () =>{
+    db.table('product').clear()
+}
 
+export const getDetailsProducts = (data) => {
+
+    let res=[]
+    for (const d of data) {
+
+        axios.get(PRODUCT_URL + "/" + d.id)
+            .then((response) =>{
+                res.push(response.data)
+            })
+    }
+
+    return res
 }
 
