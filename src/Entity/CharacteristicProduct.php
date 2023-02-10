@@ -32,10 +32,11 @@ class CharacteristicProduct
     #[Groups(['product:read'])]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'characteristicProduct')]
+    #[ORM\ManyToOne(inversedBy: 'characteristicProducts')]
     private ?Product $product = null;
 
-    #[ORM\ManyToOne(inversedBy: 'characteristicProduct')]
+    #[ORM\ManyToOne(inversedBy: 'characteristicProducts')]
+    #[Groups(['product:read'])]
     private ?Characteristic $characteristic = null;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 5, scale: 2)]

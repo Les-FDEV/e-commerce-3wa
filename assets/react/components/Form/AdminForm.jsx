@@ -1,31 +1,52 @@
-import React, { useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useForm} from "react-hook-form";
 import FormLabel from "./FormLabel";
 import FormInput from "./FormInput";
 import FormTextarea from "./FormTextarea";
 import FormSelect from "./FormSelect";
 
-function AdminForm({formType, formFields, formSubmit, selected, setSelected}) {
-    const {register, handleSubmit, setValue} = useForm();
+
+function AdminForm({
+                       formType,
+                       formFields,
+                       formSubmit,
+                       selectedWeight,
+                       setSelectedWeight,
+                       selectedColor,
+                       setSelectedColor,
+                       selectedCategories,
+                       setSelectedCategories
+                   }) {
+    const {register, handleSubmit, setValue} = useForm(),
+        [change, setChange] = useState(false)
+    let fin = false
 
     useEffect(() => {
         if (formType === "edit") {
+            console.log('fin1', fin)
             formFields.forEach(field => {
-                if (field.name !== "categories") {
-                    setValue(field.name, field.value);
-                } else {
-                    setSelected(field.value)
+                if(field.value&&field.value!==""&&!fin){
+                    if (field.name !== "categories" && field.name !== "weight"  && field.name !== "color") {
+                        setValue(field.name, field.value);
+                    }
+                    else {
+                        if (field.name === "categories") {
+                            setSelectedCategories(field.value)
+                            fin = true
+                        }
+                        if (field.name === "weight") {
+                            setSelectedWeight(field.value)
+                        }
+                        if (field.name === "color") {
+                            setSelectedColor(field.value)
+                        }
+                    }
                 }
-            });
-        } else {
-            formFields.forEach(field => setValue(field.name, ""));
+            })
+            if(!fin) setChange(!change)
+            console.log('fin2', fin)
         }
-    }, [formType, formFields, setValue]);
-
-
-
-    useEffect(() => {
-    }, [selected])
+    }, [formType, change]);
 
     const renderFormFields = () => {
         return formFields.map((field, index) => {
@@ -83,8 +104,18 @@ function AdminForm({formType, formFields, formSubmit, selected, setSelected}) {
                             <FormLabel htmlFor={field.name} label={field.label}/>
                             <FormSelect
                                 options={field.options}
-                                selected={selected}
-                                setSelected={setSelected}
+                                selected={
+                                    field.name === "categories" ?
+                                        selectedCategories : field.name === "weight" ?
+                                            selectedWeight : selectedColor
+                                }
+                                setSelected={
+                                    field.name === "categories" ?
+                                        setSelectedCategories : field.name === "weight" ?
+                                            setSelectedWeight : setSelectedColor
+
+                                }
+                                multiple={field.multiple}
                             />
                         </div>
                     );

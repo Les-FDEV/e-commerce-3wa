@@ -14,13 +14,13 @@ const getProduct = (id) => {
 
 const createProduct = (product) => {
     return axios.post(PRODUCT_URL, product)
-        .then(response => response.data)
+        .then(response => response)
         .catch(error => error);
 }
 
 const updateProduct = (id, product) => {
     return axios.put(PRODUCT_URL + "/" + id, product)
-        .then(response => response.data)
+        .then(response => response)
         .catch(error => error);
 }
 
