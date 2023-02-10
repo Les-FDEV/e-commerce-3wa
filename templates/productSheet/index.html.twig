@@ -23,7 +23,10 @@
                         <span>{{ categsProduct.name }}</span>
                     {% endfor %}
                 </div>
-            <div {{ react_component('AddProductInCartController', {"id":oneProduct.id}) }}></div>
+            <a href="https://127.0.0.1:8000/cart">
+                <div {{ react_component('AddProductInCartController', {"id":oneProduct.id}) }}></div>
+            </a>
+
         </div>
     </div>
 {% endblock %}

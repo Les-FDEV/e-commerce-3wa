@@ -13,7 +13,7 @@ const AddProductInCart = ({productId}) => {
     return (
 
         <div>
-            <button className='btn btn-success' onClick={handleClick} >Add</button>
+            <button className='btn btn-success btn-panier' onClick={handleClick} >Ajouter au panier</button>
         </div>
 
     )

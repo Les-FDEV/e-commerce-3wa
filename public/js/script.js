@@ -31,7 +31,7 @@ $( document ).ready(function() {
                     $( ".resultsreach h6" ).html('<strong>Description</strong> </br></br>'+val.description);
 
                         $.map( val.characteristicProducts, function( val1 ) {
-                            $( ".resultsreach p" ).html('Prix : '+val1.price);
+                            $( ".resultsreach p" ).html('Prix : ' +val1.price);
                         });
 
                     $( ".resultsreach a" ).html('En s\'avoir plus')

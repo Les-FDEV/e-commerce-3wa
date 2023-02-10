@@ -21,14 +21,10 @@
                 <h3>{{ productsRands.name }}</h3>
                 <p>{{ productsRands.description }}</p>
 
-                {% for productsCarac in productsRands.characteristicProducts %}
-                    {{ productsCarac.price }}
-                {% endfor %}
-
                 {% for categsProduct in productsRands.categories %}
                     <span>{{ categsProduct.name }}</span>
                 {% endfor %}
-
+                <a class="link-home" href="{{ path('oneProduct', {'id' : productsRands.id }) }}" >En s'avoir plus</a>
             {% endfor %}
         </div>
         <div class="newProduct">
