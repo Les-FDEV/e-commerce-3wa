@@ -362,7 +362,7 @@ function AdminProductsPage() {
             if (typeof data.file === "object") {
                 const formData = new FormData();
                 formData.append("file", data.file[0]);
-                response = await ProductAPI.createProductImage(response.data.id, formData);
+                const lastResponse = await ProductAPI.createProductImage(response.data.id, formData);
 
             }
 
