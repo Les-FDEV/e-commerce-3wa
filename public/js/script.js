@@ -24,7 +24,7 @@ $( document ).ready(function() {
             success:function(data){
                 // the next thing you want to do
                 $.map( data, function( val ) {
-                    console.log(val)
+
                     $( ".resultsreach" ).addClass("skin")
                     $( ".resultsreach h1" ).html('Resultat de la recherche :');
                     $( ".resultsreach h5" ).html(val.name);
@@ -32,7 +32,10 @@ $( document ).ready(function() {
 
                         $.map( val.characteristicProducts, function( val1 ) {
                             $( ".resultsreach p" ).html('Prix : '+val1.price);
-                    });
+                        });
+
+                    $( ".resultsreach a" ).html('En s\'avoir plus')
+                    $( ".resultsreach a" ).attr("href", window.location.origin + '/product/' + val.id)
                 });
             }
         });

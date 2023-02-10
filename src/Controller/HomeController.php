@@ -16,7 +16,6 @@ class HomeController extends AbstractController
     public function index(ProductRepository $productRepository, CategoryRepository $categoryRepository, Request $request): Response
     {
 
-
         if ($request->isXMLHttpRequest()) {
 
             $id = $request->get('value');
@@ -24,7 +23,6 @@ class HomeController extends AbstractController
             $query = $productRepository->findByExampleField($id);
 
             return $this->json($query);
-
         }
 
         $products = $productRepository->findBy(array(),array('id' => 'DESC'),5 );
@@ -49,6 +47,33 @@ class HomeController extends AbstractController
             'controller_name' => 'HomeController',
             'oneProduct' =>  $productRepository->find($id),
             'categs' => $categs
+        ]);
+    }
+
+    #[Route('/tous-les-produits', name: 'allProduct')]
+    public function allProduct(ProductRepository $productRepository, CategoryRepository $categoryRepository): Response
+    {
+        $allProduct = $productRepository->findAll();
+
+        $categs = $categoryRepository->findAll();
+        return $this->render('productSheet/allProduct.html.twig', [
+            'controller_name' => 'HomeController',
+            'categs' => $categs,
+            'allProduct' => $allProduct
+        ]);
+    }
+    #[Route('/categories/{name}/{id}', name: 'categsProduct')]
+    public function searchCategs($name, $id, CategoryRepository $categoryRepository): Response
+    {
+
+        $allCategs = $categoryRepository->findAll();
+        $categs = $categoryRepository->find($id);
+
+        return $this->render('productSheet/categ.html.twig', [
+            'controller_name' => 'HomeController',
+            'categs' => $categs,
+            'allCategs' => $allCategs
+
         ]);
     }
 }
