@@ -1,6 +1,6 @@
 import React from 'react';
 
-function ButtonModal({buttonLabel, setShowModal, setFormType}) {
+function ButtonModal({buttonLabel, setShowModal, setFormType, setProduct}) {
     return (
         <button
             className="btn btn-primary mb-4"
@@ -8,6 +8,7 @@ function ButtonModal({buttonLabel, setShowModal, setFormType}) {
             onClick={() => {
                 setFormType("add")
                 setShowModal(true)
+                setProduct({})
             }}
         >
             {buttonLabel}

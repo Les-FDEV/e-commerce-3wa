@@ -412,6 +412,7 @@ function AdminProductsPage() {
                 buttonLabel="Ajouter un produit"
                 setShowModal={setShowModal}
                 setFormType={setFormType}
+                setProduct={setProduct}
             />
             <Pagination
                 pages={pageList}
