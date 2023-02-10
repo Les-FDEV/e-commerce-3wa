@@ -24,28 +24,42 @@ function AdminForm({
     let fin = false
 
     useEffect(() => {
-        if (formType === "edit") {
-            console.log('fin1', fin)
+        if (formType === "") {
             formFields.forEach(field => {
                 if (field.value && field.value !== "" && !fin) {
                     if (field.name !== "categories" && field.name !== "weight" && field.name !== "color") {
-                        setValue(field.name, field.value);
-                    } else {
-                        if (field.name === "categories") {
-                            setSelectedCategories(field.value)
-                            fin = true
-                        }
-                        if (field.name === "weight") {
-                            setSelectedWeight(field.value)
-                        }
-                        if (field.name === "color") {
-                            setSelectedColor(field.value)
-                        }
+                        setValue(field.name,"")
                     }
+                    if (field.name === "categories") setSelectedCategories([])
+                    if (field.name === "weight") setSelectedWeight("")
+                    if (field.name === "color") setSelectedColor("")
                 }
             })
-            if (!fin) setChange(!change)
-            console.log('fin2', fin)
+        }
+        if (formType === "edit") {
+            setTimeout(() => {
+                console.log('fin1', fin)
+                formFields.forEach(field => {
+                    if (field.value && field.value !== "" && !fin) {
+                        if (field.name !== "categories" && field.name !== "weight" && field.name !== "color") {
+                            setValue(field.name, field.value);
+                        } else {
+                            if (field.name === "categories") {
+                                setSelectedCategories(field.value)
+                                fin = true
+                            }
+                            if (field.name === "weight") {
+                                setSelectedWeight(field.value)
+                            }
+                            if (field.name === "color") {
+                                setSelectedColor(field.value)
+                            }
+                        }
+                    }
+                })
+                if (!fin) setChange(!change)
+                console.log('fin2', fin)
+            }, 2000)
         }
     }, [formType, change, currentId]);
 
