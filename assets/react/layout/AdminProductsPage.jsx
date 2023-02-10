@@ -91,7 +91,8 @@ function AdminProductsPage() {
 
     const getProductData = async () => {
         try {
-            const data = await ProductAPI.getProduct(currentProductID);
+            console.log('getProductData currentProductID',currentProductID)
+            const data = await ProductAPI.getProduct(currentProductID)
             setProduct(data)
         } catch (error) {
             console.error(error)
@@ -119,9 +120,10 @@ function AdminProductsPage() {
     }, [showModal])
 
     useEffect(() => {
+        console.log("currentProductID",currentProductID)
         if (formType === "edit") {
             console.log("edit")
-            getProductData();
+            getProductData().then()
         }
     }, [currentProductID])
 
@@ -412,6 +414,7 @@ function AdminProductsPage() {
                 formType={formType}
                 setFormType={setFormType}
                 setShowModal={setShowModal}
+                setProduct={setProduct}
             >
                 <AdminForm
                     formType={formType}
