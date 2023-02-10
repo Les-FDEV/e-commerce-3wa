@@ -48,4 +48,31 @@ class HomeController extends AbstractController
             'categs' => $categs
         ]);
     }
+
+    #[Route('/tous-les-produits', name: 'allProduct')]
+    public function allProduct(ProductRepository $productRepository, CategoryRepository $categoryRepository): Response
+    {
+        $allProduct = $productRepository->findAll();
+
+        $categs = $categoryRepository->findAll();
+        return $this->render('productSheet/allProduct.html.twig', [
+            'controller_name' => 'HomeController',
+            'categs' => $categs,
+            'allProduct' => $allProduct
+        ]);
+    }
+    #[Route('/categories/{name}/{id}', name: 'categsProduct')]
+    public function searchCategs($name, $id, CategoryRepository $categoryRepository): Response
+    {
+
+        $allCategs = $categoryRepository->findAll();
+        $categs = $categoryRepository->find($id);
+
+        return $this->render('productSheet/categ.html.twig', [
+            'controller_name' => 'HomeController',
+            'categs' => $categs,
+            'allCategs' => $allCategs
+
+        ]);
+    }
 }
