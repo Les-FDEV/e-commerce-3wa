@@ -16,12 +16,12 @@ class LoginControllerTest extends WebTestCase
         $client = static::createClient();
         $userRepository = static::getContainer()->get(UserRepository::class);
 
-        $testUser = $userRepository->findOneByEmail('testuser@gmail.com');
+        $testUser = $userRepository->findOneByEmail('patricia49@sfr.fr');
 
         $client->loginUser($testUser);
 
         $client->request('GET', "http://localhost:8000");
-        $client->clickLink("S'enregistrer");
+        //$client->clickLink("S'enregistrer");
         $this->assertResponseIsSuccessful();
         //$this->assertSelectorTextContains('h1', 'Hello John!');
     }

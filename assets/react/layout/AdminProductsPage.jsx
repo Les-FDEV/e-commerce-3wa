@@ -430,6 +430,12 @@ function AdminProductsPage() {
 
     return (
         <AdminContainer title="Gestion des produits">
+            <ButtonModal
+                buttonLabel="Ajouter un produit"
+                setShowModal={setShowModal}
+                setFormType={setFormType}
+                setProduct={setProduct}
+            />
             <div className="row">
                 <div className="col-12">
 
@@ -445,7 +451,6 @@ function AdminProductsPage() {
                     />
                 </div>
             </div>
-
             <Pagination
                 pages={pageList}
                 onPageChange={handlePageChange}
