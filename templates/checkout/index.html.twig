@@ -17,7 +17,7 @@
 
                             <div class="col-12">
                                 <label for="address" class="form-label">Adresse</label>
-                                <input type="text" class="form-control" id="address" placeholder="1234 rue des saints" required>
+                                <input type="text" class="form-control" id="address" placeholder="1234 rue des saints" >
                                 <div class="invalid-feedback">
                                     Veuillez indiquer votre adresse d'expédition
                                 </div>
@@ -31,7 +31,7 @@
 
                             <div class="col-md-3">
                                 <label for="zip" class="form-label">Code Postal</label>
-                                <input type="text" class="form-control" id="zip" placeholder="91254" required>
+                                <input type="text" class="form-control" id="zip" placeholder="91254">
                                 <div class="invalid-feedback">
                                     Code postal requis.
                                 </div>
@@ -39,7 +39,7 @@
 
                             <div class="col-md-4">
                                 <label for="zip" class="form-label">Ville</label>
-                                <input type="text" class="form-control" id="zip" placeholder="Paris" required>
+                                <input type="text" class="form-control" id="zip" placeholder="Paris">
                                 <div class="invalid-feedback">
                                     Ville requis.
                                 </div>
@@ -47,7 +47,7 @@
 
                             <div class="col-md-5">
                                 <label for="zip" class="form-label">Pays</label>
-                                <input type="text" class="form-control" id="zip" placeholder="91254" required>
+                                <input type="text" class="form-control" id="zip" placeholder="91254">
                                 <div class="invalid-feedback">
                                     Pays requis.
                                 </div>
@@ -68,7 +68,6 @@
                         <input type="hidden" id="_priceOrder" name="_priceOrder" />
                         <input type="hidden" name="_token" value="{{ csrf_token('valid-payment') }}">
 
-                        <button type="submit">TRY</button>
                     </form>
                 </div>
             </div>

@@ -113,7 +113,7 @@ const Cart = () => {
                                 </td>
                                 <td>
                                     <button onClick={()=>handleClick(val.id)} type="button" className="btn btn-danger btn-sm">
-                                        supprimer
+                                        <i className="bi bi-trash"></i>
                                     </button>
                                 </td>
                             </tr>

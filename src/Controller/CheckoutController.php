@@ -3,13 +3,22 @@
 namespace App\Controller;
 
 use App\Entity\Order;
+use App\Entity\OrderProducts;
 use App\Service\StripePaymentService;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
+#[isGranted('ROLE_USER')]
 class CheckoutController extends AbstractController
 {
+
+    public function __construct(private EntityManagerInterface $entityManager)
+    {
+    }
 
     #[Route('/checkout', name: 'app_checkout')]
     public function index(Request $request,StripePaymentService $paymentService)
@@ -42,24 +51,40 @@ class CheckoutController extends AbstractController
 
         if($products)
         {
-            dd($products);
-            dd($request);
 
             $user=$this->getUser();
             $price=0;
             $order=new Order();
 
-            $order  ->setUser($user)
+            for($i=0; $i < count($products) ; $i++ )
+            {
+                $details=$products[$i];
+                $orderProduct=new OrderProducts();
+
+                $orderProduct   ->setProduct($details->id)
+                                ->setQuantity($details->qte)
+                                ->setTotal($details->price * $details->qte)
+                ;
+                $price += $details->price * $details->qte;
+                $this->entityManager->persist($orderProduct);
+
+                $order->addOrderProduct($orderProduct);
+            }
+
+            $order
+                    ->setUser($user)
                     ->setTotal($price)
-                    ->setConfirmedAt(new \DateTimeImmutable())
-                    ->setCreatedAt(new \DateTimeImmutable())
-                    ->setStatut('VALIDER')
+                    ->setCreatedAt(new \DateTime())
+                    ->setStatut('en cours')
             ;
+
+            $this->entityManager->persist($order);
+            $this->entityManager->flush();
+
+            return $this->redirect('/');
+//            return $this->redirectToRoute('app_home', [], Response::HTTP_SEE_OTHER);
 
         }
 
-        return $this->render('checkout/index.html.twig',[
-
-        ]);
     }
 }

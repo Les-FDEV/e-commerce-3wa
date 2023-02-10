@@ -46,8 +46,8 @@ export const deleteProductInCart = (id) => {
     db.table('product').delete(id)
 }
 
-export const resetCart = () =>{
-    db.table('product').clear()
+export const resetCart = async () =>{
+   await db.table('product').clear()
 }
 
 export const getDetailsProducts = (data) => {
