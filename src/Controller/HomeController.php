@@ -15,8 +15,6 @@ class HomeController extends AbstractController
     #[Route('/', name: 'app_home')]
     public function index(ProductRepository $productRepository, CategoryRepository $categoryRepository, Request $request): Response
     {
-
-
         if ($request->isXMLHttpRequest()) {
 
             $id = $request->get('value');
@@ -24,7 +22,6 @@ class HomeController extends AbstractController
             $query = $productRepository->findByExampleField($id);
 
             return $this->json($query);
-
         }
 
         $products = $productRepository->findBy(array(),array('id' => 'DESC'),5 );
