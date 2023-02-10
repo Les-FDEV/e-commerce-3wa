@@ -131,6 +131,19 @@ function AdminForm({
                             />
                         </div>
                     );
+                case 'file':
+                    return (
+                        <div className="mb-3" key={index}>
+                            <FormLabel htmlFor={field.name} label={field.label}/>
+                            <FormInput
+                                type="file"
+                                name={field.name}
+                                id={field.name}
+                                register={register}
+                                required={true}
+                            />
+                        </div>
+                    );
                 default:
                     return null;
             }
@@ -139,7 +152,7 @@ function AdminForm({
     }
 
     return (
-        <form onSubmit={handleSubmit(formSubmit)}>
+        <form onSubmit={handleSubmit(formSubmit)} encType="multipart/form-data">
             {renderFormFields()}
             <button
                 type="submit"

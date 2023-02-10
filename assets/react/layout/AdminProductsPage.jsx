@@ -150,6 +150,13 @@ function AdminProductsPage() {
         },
         {
             id: 3,
+            name: 'file',
+            label: 'Image',
+            type: 'file',
+            value: product.image ?? '',
+        },
+        {
+            id: 3,
             name: 'price',
             label: 'Prix',
             type: 'number',
@@ -280,9 +287,14 @@ function AdminProductsPage() {
 
 
         try {
-            const response = await ProductAPI.createProduct(newProduct);
+            let response = await ProductAPI.createProduct(newProduct);
 
-            console.log(response)
+            if (typeof data.file === "object") {
+                const formData = new FormData();
+                console.log(data.file[0])
+                formData.append("file", data.file[0]);
+                response = await ProductAPI.createProductImage(response.data.id, formData);
+            }
 
             if (response.status === 201) {
                 setProducts([response.data, ...products]);
@@ -296,11 +308,6 @@ function AdminProductsPage() {
 
 
     const handleEdit = async (data) => {
-        console.log(data)
-        console.log(selectedCategories)
-        console.log(selectedColor)
-        console.log(selectedWeight)
-
         //verify if characteristic has been changed
         const characteristics = [
             selectedColor,
@@ -348,20 +355,28 @@ function AdminProductsPage() {
 
 
         try {
-            const response = await ProductAPI.updateProduct(currentProductID, updateProduct);
+            let response = await ProductAPI.updateProduct(currentProductID, updateProduct);
 
-            if (response.status === 200) {
-                setProducts(products.map(product => product.id === currentProductID ? response.data : product));
-                toast.success("Le produit a bien été modifié")
+            if (typeof data.file === "object") {
+                const formData = new FormData();
+                formData.append("file", data.file[0]);
+                response = await ProductAPI.createProductImage(response.data.id, formData);
+
+            }
+
+            if (response.status === 201) {
+                setProducts([response.data, ...products]);
+                toast.success("Le produit a bien été ajouté")
                 setShowModal(false)
             }
-        } catch (error) {
+        } catch
+            (error) {
             console.error(error);
         }
     }
 
 
-    // Suppression d'un produit
+// Suppression d'un produit
 
     const handleDelete = async (id) => {
         const originalProducts = [...products];
