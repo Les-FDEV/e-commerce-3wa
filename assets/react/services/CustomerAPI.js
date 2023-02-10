@@ -4,7 +4,7 @@ import axios from "axios";
 
 const getAllCustomers = () => {
     return axios.get(CUSTOMER_URL)
-        .then(response => response.data['hydra:member'])
+        .then(response => response.data)
 }
 
 const getCustomer = (id) => {

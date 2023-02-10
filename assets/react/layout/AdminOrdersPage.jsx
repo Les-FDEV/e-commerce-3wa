@@ -5,15 +5,16 @@ import AdminContainer from "../components/Container/AdminContainer";
 import Table from "../components/Table/Table";
 import ModalAdmin from "../components/Modal/ModalAdmin";
 import moment from 'moment';
-import {toast} from "react-toastify";
+import {toast, ToastContainer} from "react-toastify";
+import Pagination from "../components/Pagination/Pagination";
 
 function AdminOrdersPage(props) {
     const [orders, setOrders] = useState([]);
     const [order, setOrder] = useState({});
+    const [pageList, setPageList] = useState([]);
     const [tableData, setTableData] = useState([]);
     const [showModal, setShowModal] = useState(false);
     const [currentOrderID, setCurrentOrderID] = useState(null);
-
 
     // Le code pour remplir le tableau de data
 
@@ -29,10 +30,10 @@ function AdminOrdersPage(props) {
     const getDataTable = () => {
         if (orders) {
             console.log(orders)
-            return orders.map((order, index) => (
+            return orders.map((order) => (
                     [
-                        {value: index + 1},
-                        {value: order.confirmedAt ?? "Panier non validé"},
+                        {value: order.id},
+                        {value: order.confirmed_at ? moment(order.confirmedAt).format('l') : "Panier non validé"},
                         {
                             value: (
                                 <>
@@ -40,14 +41,21 @@ function AdminOrdersPage(props) {
                                 </>
                             )
                         },
-                        {value: order.total},
+                        {value: `${order.total} €`},
                         {
-                            value: (order.status === "payé" ? (
-                                    <span className="badge text-bg-primary">Paiement confirmé</span>
-                                ) : (
-                                    <span className="badge text-bg-danger">Paiement en attente</span>
+                            value: (order.statut === "en cours" ? (
+                                <span className="badge text-bg-primary">En cours</span>
+                            ) : (order.statut === "payé" ? (
+                                    <span className="badge text-bg-success">Payé</span>
+                                ) : (order.statut === "envoyé" ? (
+                                        <span className="badge text-bg-info">Envoyé</span>
+                                    ) : (order.statut === "livré" ? (
+                                            <span className="badge text-bg-success">Livré</span>
+
+                                        ) : null
+                                    )
                                 )
-                            )
+                            ))
                         },
                         {
                             value: (
@@ -80,7 +88,8 @@ function AdminOrdersPage(props) {
     const getOrdersData = async () => {
         try {
             const data = await OrderAPI.getAllOrders();
-            setOrders(data);
+            setOrders(data['hydra:member']);
+            setPageList(data['hydra:view'])
         } catch (error) {
             console.log(error.response);
         }
@@ -95,12 +104,22 @@ function AdminOrdersPage(props) {
         }
     }
 
+    const handlePageChange = async (page) => {
+        try {
+            const data = await OrderAPI.getOrderByPage(page);
+            console.log(data)
+            setOrders(data['hydra:member']);
+            setPageList(data['hydra:view']);
+        } catch (error) {
+            console.log(error.response);
+        }
+    }
+
     useEffect(() => {
         getOrdersData();
     }, []);
 
     useEffect(() => {
-        console.log(orders)
         setTableData(getDataTable());
     }, [orders]);
 
@@ -125,40 +144,52 @@ function AdminOrdersPage(props) {
         }
     }
 
-    const handleDeleteOrder = async (id) => {
-        const originalOrders = [...orders];
-        setOrders(orders.filter(order => order.id !== id));
+    const handleUpdateOrder = async (id, data) => {
+
+        // get key and value of data
+        const key = Object.keys(data)[0];
+        const value = Object.values(data)[0];
+
+
+        const newOrder = {
+            [key]: value
+        }
 
         try {
-            const response = await OrderAPI.deleteOrder(id);
+            const response = await OrderAPI.updateOrder(id, newOrder);
+            if (response.status === 200) {
+                toast.success("La commande a bien été modifiée");
+                setOrders(orders.map(order => order.id === id ? response.data : order));
+                setOrder(response.data);
 
-            if (response.status === 204) {
-                toast.success("La commande a bien été supprimée");
             }
         } catch (error) {
-            console.log(error.response)
-            setOrders(originalOrders);
+            console.log(error.response);
         }
     }
 
+
+
     return (
         <AdminContainer title="Gestion des commandes">
+            <Pagination
+                pages={pageList}
+                onPageChange={handlePageChange}
+            />
             <Table
                 tableHeader={tableHeader}
                 tableData={tableData}
+            />
+            <Pagination
+                pages={pageList}
+                onPageChange={handlePageChange}
             />
             <ModalAdmin
                 setShowModal={setShowModal}
             >
                 <div className="card">
                     <div className="card-header">
-                        <h6 className="card-title">Détails de la commande</h6>
-
-                        <div className="card-tools">
-                            <button type="button" className="btn btn-tool" data-bs-dismiss="modal" aria-label="Close">
-                                <i className="fas fa-times"></i>
-                            </button>
-                        </div>
+                        <h4 className="card-title">Détails de la commande #{order.id}</h4>
                     </div>
                     <div className="card-body">
                         <div className="row">
@@ -174,6 +205,9 @@ function AdminOrdersPage(props) {
                                         </li>
                                         <li className="list-group-item">
                                             <b>Prénom</b> <span className="float-right">{order.user?.firstname}</span>
+                                        </li>
+                                        <li className="list-group-item">
+                                            <b>Téléphone</b> <span className="float-right">{customer.phoneNumber}</span>
                                         </li>
                                     </ul>
                                 </div>
@@ -235,11 +269,20 @@ function AdminOrdersPage(props) {
                                             className="float-right">{moment(order.confirmedAt).format('l')}</span>
                                         </li>
                                         <li className="list-group-item">
-                                            <b>Statut</b> <span className="float-right">{order.status === "payé" ? (
-                                            <span className="badge text-bg-primary">Paiement confirmé</span>
-                                        ) : (
-                                            <span className="badge text-bg-danger">Paiement en attente</span>
-                                        )}</span>
+                                            <b>Statut</b> <span
+                                            className="float-right">{(order.statut === "en cours" ? (
+                                            <span className="badge text-bg-primary">En cours</span>
+                                        ) : (order.statut === "payé" ? (
+                                                <span className="badge text-bg-success">Payé</span>
+                                            ) : (order.statut === "envoyé" ? (
+                                                    <span className="badge text-bg-info">Envoyé</span>
+                                                ) : (order.statut === "livré" ? (
+                                                        <span className="badge text-bg-success">Livré</span>
+
+                                                    ) : null
+                                                )
+                                            )
+                                        ))}</span>
                                         </li>
                                         <li className="list-group-item">
                                             <b>Montant total</b> <span className="float-right">{order.total} €</span>
@@ -259,9 +302,9 @@ function AdminOrdersPage(props) {
                                                     <li key={index}
                                                         className="list-group-item">
                                                         <p
-                                                           >Produit : {orderProduct.product}</p>
+                                                        >Produit : {orderProduct.product}</p>
                                                         <p
-                                                            >Quantité(s) : {orderProduct.quantity}</p>
+                                                        >Quantité(s) : {orderProduct.quantity}</p>
                                                     </li>
                                                 )
                                             )
@@ -274,24 +317,52 @@ function AdminOrdersPage(props) {
                             <div className="col-12">
                                 <h5>Actions</h5>
                                 <div className="col-12 d-flex flex-row ">
-                                    <button className="btn btn-primary me-2"
-                                            onClick={() => handleConfirmOrder(order.id)}>
-                                        Confirmer le paiement
-                                    </button>
-                                    <button className="btn btn-danger ml-2" onClick={() => handleDeleteOrder(order.id)}>
+                                    {order.statut === "en cours" && (
+                                        <button
+                                            className="btn btn-primary me-2"
+                                            data-bs-dismiss="modal"
+                                            onClick={() => handleUpdateOrder(order.id, {statut: "payé"})}
+                                        >
+                                            Confirmer le paiement
+                                        </button>
+                                    )}
+                                    <button
+                                        className="btn btn-danger ml-2"
+                                        data-bs-dismiss="modal"
+                                        onClick={() => handleDelete(order.id)}
+                                    >
                                         Supprimer la commande
                                     </button>
-                                    <button className="btn btn-success">
-                                        Valider l'envoie
-                                    </button>
+                                    {order.statut === "payé" && order.statut !== "envoyé" && (
+                                        <button
+                                            className="btn btn-success"
+                                            data-bs-dismiss="modal"
+                                            onClick={() => handleUpdateOrder(order.id, {statut: "envoyé"})}
+                                        >
+                                            Valider l'envoie
+                                        </button>
+                                    )
+                                    }
+                                    {order.statut === "envoyé" && (
+                                        <button
+                                            className="btn btn-success"
+                                            data-bs-dismiss="modal"
+                                            onClick={() => handleUpdateOrder(order.id, {statut: "livré"})}
+                                        >
+                                            Valider la réception
+                                        </button>
+                                    )
+                                    }
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </ModalAdmin>
+            <ToastContainer/>
         </AdminContainer>
-    );
+    )
+        ;
 }
 
 

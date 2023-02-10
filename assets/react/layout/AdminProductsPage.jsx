@@ -10,12 +10,15 @@ import CharacteristicsAPI from "../services/CharacteristicsAPI";
 import {CATEGORY_PRODUCTS_URL, CATEGORY_URL, CHARACTERISTIC_PRODUCTS_URL, CHARACTERISTICS_URL} from "../config/config";
 import CharacteristicProductsAPI from "../services/CharacteristicProductsAPI";
 import {toast, ToastContainer} from "react-toastify";
+import OrderAPI from "../services/OrderAPI";
+import Pagination from "../components/Pagination/Pagination";
 
 function AdminProductsPage() {
     const [products, setProducts] = useState([]);
     const [product, setProduct] = useState({});
     const [categories, setCategories] = useState([]);
     const [tableData, setTableData] = useState([]);
+    const [pageList, setPageList] = useState([]);
     const [formType, setFormType] = useState("add");
     const [showModal, setShowModal] = useState(false);
     const [currentProductID, setCurrentProductID] = useState(null);
@@ -37,7 +40,7 @@ function AdminProductsPage() {
         if (products) {
             return products.map((product, index) => (
                     [
-                        {value: index + 1},
+                        {value: product.id},
                         {
                             value: product?.categories?.map((category, index) => (
                                     <span key={index} className="badge text-bg-primary">{category.name}</span>
@@ -79,7 +82,8 @@ function AdminProductsPage() {
     const getProductsData = async () => {
         try {
             const data = await ProductAPI.getAllProducts();
-            setProducts(data)
+            setProducts(data['hydra:member']);
+            setPageList(data['hydra:view'])
         } catch (error) {
             console.error(error)
         }
@@ -97,7 +101,7 @@ function AdminProductsPage() {
     const getCategoriesData = async () => {
         try {
             const data = await CategoryAPI.getAllCategories()
-            setCategories(data)
+            setCategories(data['hydra:member'])
         } catch (error) {
             console.error(error)
         }
@@ -116,6 +120,7 @@ function AdminProductsPage() {
 
     useEffect(() => {
         if (formType === "edit") {
+            console.log("edit")
             getProductData();
         }
     }, [currentProductID])
@@ -125,7 +130,6 @@ function AdminProductsPage() {
         setTableData(getDataTable());
     }, [products]);
 
-    // Le code pour préparer le formulaire de création/édition de produit
 
     const productFields = [
         {
@@ -244,7 +248,7 @@ function AdminProductsPage() {
             }
             try {
                 const response = await CharacteristicsAPI.createCharacteristic(newCharacteristic)
-
+                console.log(response)
                 if (response.status === 201) {
                     const newCharacteristicProducts = {
                         price: data.price,
@@ -342,14 +346,12 @@ function AdminProductsPage() {
             )
         }
 
+
         try {
-            const response = await ProductAPI.updateProduct(data.id, updateProduct);
+            const response = await ProductAPI.updateProduct(currentProductID, updateProduct);
 
             if (response.status === 200) {
-                const originalProducts = [...products];
-                const index = originalProducts.findIndex(product => product.id === data.id);
-                originalProducts[index] = response.data;
-                setProducts(originalProducts);
+                setProducts(products.map(product => product.id === currentProductID ? response.data : product));
                 toast.success("Le produit a bien été modifié")
                 setShowModal(false)
             }
@@ -376,6 +378,16 @@ function AdminProductsPage() {
         }
     }
 
+    const handlePageChange = async (page) => {
+        try {
+            const data = await OrderAPI.getOrderByPage(page);
+            console.log(data)
+            setProducts(data['hydra:member']);
+            setPageList(data['hydra:view']);
+        } catch (error) {
+            console.log(error.response);
+        }
+    }
 
     return (
         <AdminContainer title="Gestion des produits">
@@ -384,9 +396,17 @@ function AdminProductsPage() {
                 setShowModal={setShowModal}
                 setFormType={setFormType}
             />
+            <Pagination
+                pages={pageList}
+                onPageChange={handlePageChange}
+            />
             <Table
                 tableHeader={tableHeader}
                 tableData={tableData}
+            />
+            <Pagination
+                pages={pageList}
+                onPageChange={handlePageChange}
             />
             <ModalAdmin
                 formType={formType}
@@ -402,7 +422,8 @@ function AdminProductsPage() {
                     selectedColor={selectedColor}
                     setSelectedWeight={setSelectedWeight}
                     selectedWeight={selectedWeight}
-                    currentID={currentProductID}
+                    currentId={currentProductID}
+                    isSubmit={showModal}
                 />
             </ModalAdmin>
             <ToastContainer/>

@@ -13,7 +13,7 @@ class OrderFixtures extends Fixture
     {
         $faker = Faker\Factory::create('fr_FR');
 
-        $status = ['en cours', 'envoyé', 'livré', 'annulé'];
+        $status = ['en cours','payé', 'envoyé', 'livré'];
         for ($o = 0; $o < 20; $o++) {
             $order = new Order();
             $order

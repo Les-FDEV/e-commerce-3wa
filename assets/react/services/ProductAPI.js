@@ -3,7 +3,7 @@ import {PRODUCT_URL} from "../config/config.js";
 
 const getAllProducts = () => {
     return axios.get(PRODUCT_URL)
-        .then(response => response.data['hydra:member'])
+        .then(response => response.data)
 }
 
 const getProduct = (id) => {

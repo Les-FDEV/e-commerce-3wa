@@ -26,7 +26,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
         new Put,
         new Delete
     ],
-    //normalizationContext: ['groups' => ['address:output']],
+    normalizationContext: ['groups' => ['user:read']],
+    paginationItemsPerPage: 10,
     //denormalizationContext: ['groups' => ['address:input']],
 )]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
@@ -34,11 +35,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['order:read'])]
+    #[Groups(['order:read', 'address:read', 'user:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
-    #[Groups(['order:read'])]
+    #[Groups(['order:read', 'address:read', 'user:read'])]
     private ?string $email = null;
 
     #[ORM\Column]
@@ -51,22 +52,23 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $password = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['order:read'])]
+    #[Groups(['order:read', 'address:read', 'user:read'])]
     private ?string $firstname = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['order:read'])]
+    #[Groups(['order:read', 'address:read', 'user:read'])]
     private ?string $lastname = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['order:read'])]
+    #[Groups(['order:read', 'address:read', 'user:read'])]
     private ?string $phoneNumber = null;
 
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Address::class)]
-    #[Groups(['order:read'])]
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Address::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[Groups(['order:read', 'address:read', 'user:read'])]
     private Collection $addresses;
 
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Order::class)]
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Order::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[Groups(['address:read', 'user:read'])]
     private Collection $orders;
 
     public function __construct()

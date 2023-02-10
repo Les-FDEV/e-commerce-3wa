@@ -28,31 +28,30 @@ class Address
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['order:read'])]
+    #[Groups(['order:read', 'address:read', 'user:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['order:read'])]
+    #[Groups(['order:read', 'address:read', 'user:read'])]
     private ?string $type = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['order:read'])]
+    #[Groups(['order:read', 'address:read', 'user:read'])]
     private ?string $country = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['order:read'])]
+    #[Groups(['order:read', 'address:read', 'user:read'])]
     private ?string $city = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['order:read'])]
+    #[Groups(['order:read', 'address:read', 'user:read'])]
     private ?string $street = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['order:read'])]
+    #[Groups(['order:read', 'address:read', 'user:read'])]
     private ?string $number = null;
 
-    #[ORM\ManyToOne(inversedBy: 'addresses')]
-
+    #[ORM\ManyToOne(targetEntity: User::class, cascade: ['persist', 'remove'], inversedBy: 'addresses')]
     private ?User $user = null;
 
     public function getId(): ?int

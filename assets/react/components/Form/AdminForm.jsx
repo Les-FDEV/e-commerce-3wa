@@ -15,7 +15,9 @@ function AdminForm({
                        selectedColor,
                        setSelectedColor,
                        selectedCategories,
-                       setSelectedCategories
+                       setSelectedCategories,
+                       isSubmit,
+                       currentId
                    }) {
     const {register, handleSubmit, setValue} = useForm(),
         [change, setChange] = useState(false)
@@ -25,11 +27,10 @@ function AdminForm({
         if (formType === "edit") {
             console.log('fin1', fin)
             formFields.forEach(field => {
-                if(field.value&&field.value!==""&&!fin){
-                    if (field.name !== "categories" && field.name !== "weight"  && field.name !== "color") {
+                if (field.value && field.value !== "" && !fin) {
+                    if (field.name !== "categories" && field.name !== "weight" && field.name !== "color") {
                         setValue(field.name, field.value);
-                    }
-                    else {
+                    } else {
                         if (field.name === "categories") {
                             setSelectedCategories(field.value)
                             fin = true
@@ -43,10 +44,21 @@ function AdminForm({
                     }
                 }
             })
-            if(!fin) setChange(!change)
+            if (!fin) setChange(!change)
             console.log('fin2', fin)
         }
-    }, [formType, change]);
+    }, [formType, change, currentId]);
+
+    useEffect(() => {
+        if (isSubmit) {
+            formFields.forEach(field => {
+                setValue(field.name, "");
+                setSelectedColor([])
+                setSelectedWeight([])
+                setSelectedCategories([])
+            })
+        }
+    }, [isSubmit])
 
     const renderFormFields = () => {
         return formFields.map((field, index) => {

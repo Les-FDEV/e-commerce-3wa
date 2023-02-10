@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect,  useState} from 'react';
 import Table from "../components/Table/Table";
 import CategoryAPI from "../services/CategoryAPI";
 import AdminContainer from "../components/Container/AdminContainer";
@@ -7,11 +7,14 @@ import ModalAdmin from "../components/Modal/ModalAdmin";
 import AdminForm from "../components/Form/AdminForm";
 import {toast, ToastContainer} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
+import OrderAPI from "../services/OrderAPI";
+import Pagination from "../components/Pagination/Pagination";
 
 
 function AdminCategoriesPage(props) {
     const [categories, setCategories] = useState([]);
     const [category, setCategory] = useState({});
+    const [pageList, setPageList] = useState([]);
     const [tableData, setTableData] = useState([]);
     const [formType, setFormType] = useState("add");
     const [showModal, setShowModal] = useState(false);
@@ -39,9 +42,9 @@ function AdminCategoriesPage(props) {
 
     const getDataTable = () => {
         if (categories) {
-            return categories.map((category, index) => (
+            return categories.map((category) => (
                     [
-                        {value: index + 1},
+                        {value: category.id},
                         {value: category.name},
                         {value: category.description},
                         {
@@ -76,7 +79,9 @@ function AdminCategoriesPage(props) {
     const getCategoriesData = async () => {
         try {
             const data = await CategoryAPI.getAllCategories();
-            setCategories(data)
+            console.log(data)
+            setCategories(data['hydra:member']);
+            setPageList(data['hydra:view']);
         } catch (error) {
             console.error(error)
         }
@@ -170,6 +175,16 @@ function AdminCategoriesPage(props) {
         }
     }
 
+    const handlePageChange = async (page) => {
+        try {
+            const data = await OrderAPI.getOrderByPage(page);
+            setCategories(data['hydra:member']);
+            setPageList(data['hydra:view']);
+        } catch (error) {
+            console.log(error.response);
+        }
+    }
+
     return (
         <>
             <AdminContainer title="Gestion des catégories">
@@ -178,9 +193,17 @@ function AdminCategoriesPage(props) {
                     setFormType={setFormType}
                     setShowModal={setShowModal}
                 />
+                <Pagination
+                    pages={pageList}
+                    onPageChange={handlePageChange}
+                />
                 <Table
                     tableHeader={tableHeader}
                     tableData={tableData}
+                />
+                <Pagination
+                    pages={pageList}
+                    onPageChange={handlePageChange}
                 />
                 {showModal && (
                     <ModalAdmin
