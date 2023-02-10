@@ -25,6 +25,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
     ],
     normalizationContext: ['groups' => ['product:read']],
     order: ['id' => 'DESC'],
+    paginationItemsPerPage: 10,
     //denormalizationContext: ['groups' => ['address:input']],
 )]
 class Product

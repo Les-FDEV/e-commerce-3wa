@@ -32,9 +32,6 @@ class Payment
     #[Groups(['order:read'])]
     private ?int $id = null;
 
-    #[ORM\OneToOne(inversedBy: 'payment', cascade: ['persist', 'remove'])]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Order $orderReference = null;
 
     #[ORM\Column(length: 255)]
     #[Groups(['order:read'])]
@@ -44,21 +41,12 @@ class Payment
     #[Groups(['order:read'])]
     private ?string $term = null;
 
+    #[ORM\OneToOne(mappedBy: 'payment', cascade: ['persist', 'remove'])]
+    private ?Order $orderReference = null;
+
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getOrderReference(): ?Order
-    {
-        return $this->orderReference;
-    }
-
-    public function setOrderReference(Order $orderReference): self
-    {
-        $this->orderReference = $orderReference;
-
-        return $this;
     }
 
     public function getMethod(): ?string
@@ -81,6 +69,28 @@ class Payment
     public function setTerm(string $term): self
     {
         $this->term = $term;
+
+        return $this;
+    }
+
+    public function getOrderReference(): ?Order
+    {
+        return $this->orderReference;
+    }
+
+    public function setOrderReference(?Order $orderReference): self
+    {
+        // unset the owning side of the relation if necessary
+        if ($orderReference === null && $this->orderReference !== null) {
+            $this->orderReference->setPayment(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($orderReference !== null && $orderReference->getPayment() !== $this) {
+            $orderReference->setPayment($this);
+        }
+
+        $this->orderReference = $orderReference;
 
         return $this;
     }

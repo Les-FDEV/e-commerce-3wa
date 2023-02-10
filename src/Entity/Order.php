@@ -27,49 +27,50 @@ use Symfony\Component\Serializer\Annotation\Groups;
         new Delete
     ],
     normalizationContext: ['groups' => ['order:read']],
+    paginationItemsPerPage: 5,
 )]
 class Order
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['order:read'])]
+    #[Groups(['order:read', 'address:read', 'user:read'])]
     private ?int $id = null;
 
-    #[Groups(['order:read'])]
+    #[Groups(['order:read', 'address:read', 'user:read'])]
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTime $created_at = null;
 
-    #[Groups(['order:read'])]
+    #[Groups(['order:read', 'address:read', 'user:read'])]
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTime $confirmed_at = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['order:read'])]
+    #[Groups(['order:read', 'address:read', 'user:read'])]
     private ?string $statut = null;
 
-    #[ORM\ManyToOne(inversedBy: 'orders')]
+    #[ORM\ManyToOne(cascade: ['persist', 'remove'], inversedBy: 'orders')]
     #[ORM\JoinColumn(nullable: true)]
     #[Groups(['order:read'])]
     private ?User $user = null;
 
     #[ORM\OneToMany(mappedBy: 'orderReference', targetEntity: OrderProducts::class, orphanRemoval: true)]
     #[ORM\JoinColumn(nullable: true)]
-    #[Groups(['order:read'])]
+    #[Groups(['order:read', 'address:read', 'user:read'])]
     private Collection $orderProducts;
 
-    #[ORM\OneToOne(mappedBy: 'orderReference', cascade: ['persist', 'remove'])]
-    #[ORM\JoinColumn(nullable: true)]
-    #[Groups(['order:read'])]
-    private ?Payment $payment = null;
 
     #[ORM\ManyToOne(inversedBy: 'orderReference')]
     #[ORM\JoinColumn(nullable: true)]
-    #[Groups(['order:read'])]
+    #[Groups(['order:read', 'address:read', 'user:read'])]
     private ?Shipping $shipping = null;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2, nullable: true)]
-    private ?string $Total = null;
+    #[Groups(['order:read', 'address:read', 'user:read'])]
+    private ?string $total = null;
+
+    #[ORM\OneToOne(inversedBy: 'orderReference', cascade: ['persist', 'remove'])]
+    private ?Payment $payment = null;
 
     public function __construct()
     {
@@ -159,22 +160,6 @@ class Order
         return $this;
     }
 
-    public function getPayment(): ?Payment
-    {
-        return $this->payment;
-    }
-
-    public function setPayment(Payment $payment): self
-    {
-        // set the owning side of the relation if necessary
-        if ($payment->getOrderReference() !== $this) {
-            $payment->setOrderReference($this);
-        }
-
-        $this->payment = $payment;
-
-        return $this;
-    }
 
     public function getShipping(): ?Shipping
     {
@@ -190,12 +175,24 @@ class Order
 
     public function getTotal(): ?string
     {
-        return $this->Total;
+        return $this->total;
     }
 
-    public function setTotal(?string $Total): self
+    public function setTotal(?string $total): self
     {
-        $this->Total = $Total;
+        $this->total = $total;
+
+        return $this;
+    }
+
+    public function getPayment(): ?Payment
+    {
+        return $this->payment;
+    }
+
+    public function setPayment(?Payment $payment): self
+    {
+        $this->payment = $payment;
 
         return $this;
     }

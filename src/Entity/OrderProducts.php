@@ -44,7 +44,7 @@ class OrderProducts
     #[Groups(['order:read'])]
     private ?int $total = null;
 
-    #[ORM\ManyToOne(inversedBy: 'orderProducts')]
+    #[ORM\ManyToOne(cascade: ['persist', 'remove'], inversedBy: 'orderProducts')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Order $orderReference = null;
 
