@@ -16,9 +16,9 @@ const Pagination = ({onPageChange, pages}) => {
                         <button className="page-link" onClick={() => onPageChange(value)}>First</button>
                     </li>);
                 }
-                if (key === 'hydra:last') {
+                if (key === 'hydra:previous') {
                     pagesList.push(<li key={key}>
-                        <button className="page-link" onClick={() => onPageChange(value)}>Last</button>
+                        <button className="page-link" onClick={() => onPageChange(value)}>Previous</button>
                     </li>);
                 }
                 if (key === 'hydra:next') {
@@ -26,9 +26,9 @@ const Pagination = ({onPageChange, pages}) => {
                         <button className="page-link" onClick={() => onPageChange(value)}>Next</button>
                     </li>);
                 }
-                if (key === 'hydra:previous') {
+                if (key === 'hydra:last') {
                     pagesList.push(<li key={key}>
-                        <button className="page-link" onClick={() => onPageChange(value)}>Previous</button>
+                        <button className="page-link" onClick={() => onPageChange(value)}>Last</button>
                     </li>);
                 }
             }
@@ -42,7 +42,7 @@ const Pagination = ({onPageChange, pages}) => {
 
     return (
         <nav aria-label="Page navigation example">
-            <ul className="pagination">
+            <ul className="pagination d-flex justify-content-center">
                 {pageList}
             </ul>
         </nav>

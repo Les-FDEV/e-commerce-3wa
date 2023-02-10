@@ -7,14 +7,17 @@ import ModalAdmin from "../components/Modal/ModalAdmin";
 import moment from 'moment';
 import {toast, ToastContainer} from "react-toastify";
 import Pagination from "../components/Pagination/Pagination";
+import SearchForm from "../components/Form/SearchForm";
 
 function AdminOrdersPage(props) {
     const [orders, setOrders] = useState([]);
+    const [filteredOrders, setFilteredOrders] = useState([]);
     const [order, setOrder] = useState({});
     const [pageList, setPageList] = useState([]);
     const [tableData, setTableData] = useState([]);
     const [showModal, setShowModal] = useState(false);
     const [currentOrderID, setCurrentOrderID] = useState(null);
+    const [search, setSearch] = useState("");
 
     // Le code pour remplir le tableau de data
 
@@ -30,7 +33,7 @@ function AdminOrdersPage(props) {
     const getDataTable = () => {
         if (orders) {
             console.log(orders)
-            return orders.map((order) => (
+            return filteredOrders.map((order) => (
                     [
                         {value: order.id},
                         {value: order.confirmed_at ? moment(order.confirmedAt).format('l') : "Panier non validé"},
@@ -89,6 +92,7 @@ function AdminOrdersPage(props) {
         try {
             const data = await OrderAPI.getAllOrders();
             setOrders(data['hydra:member']);
+            setFilteredOrders(data['hydra:member']);
             setPageList(data['hydra:view'])
         } catch (error) {
             console.log(error.response);
@@ -121,7 +125,7 @@ function AdminOrdersPage(props) {
 
     useEffect(() => {
         setTableData(getDataTable());
-    }, [orders]);
+    }, [filteredOrders]);
 
     useEffect(() => {
         if (currentOrderID) {
@@ -168,10 +172,34 @@ function AdminOrdersPage(props) {
         }
     }
 
+    const handleSearch = () => {
+        const originalOrders = [...orders];
+        console.log(originalOrders)
+        if (!search.length > 3 || search.length === 0) {
+            setOrders(originalOrders);
+            return;
+        }
+        setFilteredOrders(
+            orders.filter(
+                order => order?.user.firstname.toLowerCase().includes(search.toLowerCase()) ||
+                    order?.user.lastname.toLowerCase().includes(search.toLowerCase()) ||
+                    order?.user.email.toLowerCase().includes(search.toLowerCase()) ||
+                    order?.id.toString().includes(search.toLowerCase())
+            )
+        )
+    }
 
+    useEffect(() => {
+        handleSearch()
+    }, [search])
 
     return (
         <AdminContainer title="Gestion des commandes">
+            <SearchForm
+                search={search}
+                setSearch={setSearch}
+                handleSearch={handleSearch}
+            />
             <Pagination
                 pages={pageList}
                 onPageChange={handlePageChange}
@@ -207,7 +235,8 @@ function AdminOrdersPage(props) {
                                             <b>Prénom</b> <span className="float-right">{order.user?.firstname}</span>
                                         </li>
                                         <li className="list-group-item">
-                                            <b>Téléphone</b> <span className="float-right">{order.user?.phoneNumber}</span>
+                                            <b>Téléphone</b> <span
+                                            className="float-right">{order.user?.phoneNumber}</span>
                                         </li>
                                     </ul>
                                 </div>

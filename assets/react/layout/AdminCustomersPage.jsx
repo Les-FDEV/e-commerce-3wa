@@ -7,14 +7,17 @@ import AdminForm from "../components/Form/AdminForm";
 import Pagination from "../components/Pagination/Pagination";
 import OrderAPI from "../services/OrderAPI";
 import moment from "moment/moment";
+import SearchForm from "../components/Form/SearchForm";
 
 function AdminCustomersPage() {
     const [customers, setCustomers] = useState([])
     const [customer, setCustomer] = useState({})
+    const [filteredCustomers, setFilteredCustomers] = useState([])
     const [tableData, setTableData] = useState([])
     const [pageList, setPageList] = useState([])
     const [showModal, setShowModal] = useState(false)
     const [currentCustomerID, setCurrentCustomerID] = useState(null)
+    const [search, setSearch] = useState("")
 
     const tableHeader = [
         {id: 1, name: '#'},
@@ -27,7 +30,7 @@ function AdminCustomersPage() {
 
     const getDataTable = () => {
         if (customers) {
-            return customers.map((customer) => (
+            return filteredCustomers.map((customer) => (
                     [
                         {value: customer.id},
                         {value: customer.lastname},
@@ -67,6 +70,7 @@ function AdminCustomersPage() {
         try {
             const data = await CustomerAPI.getAllCustomers()
             setCustomers(data['hydra:member']);
+            setFilteredCustomers(data['hydra:member'])
             setPageList(data['hydra:view']);
         } catch (e) {
             console.log(e)
@@ -88,7 +92,7 @@ function AdminCustomersPage() {
 
     useEffect(() => {
         setTableData(getDataTable())
-    }, [customers])
+    }, [filteredCustomers])
 
     useEffect(() => {
         if (currentCustomerID) {
@@ -122,8 +126,34 @@ function AdminCustomersPage() {
         }
     }
 
+    const handleSearch = () => {
+        const originalCustomers = [...customers];
+        console.log(originalCustomers)
+        if (!search.length > 3 || search.length === 0) {
+            setCustomers(originalCustomers);
+            return;
+        }
+        setFilteredCustomers(
+            customers.filter(
+                customer => customer.firstname.toLowerCase().includes(search.toLowerCase()) ||
+                    customer.lastname.toLowerCase().includes(search.toLowerCase()) ||
+                    customer.email.toLowerCase().includes(search.toLowerCase()) ||
+                    customer.phoneNumber.toLowerCase().includes(search.toLowerCase())
+            )
+        )
+    }
+
+    useEffect(() => {
+        handleSearch()
+    }, [search])
+
     return (
         <AdminContainer title="Gestion des clients">
+            <SearchForm
+                search={search}
+                setSearch={setSearch}
+                handleSearch={handleSearch}
+            />
             <Pagination
                 pages={pageList}
                 onPageChange={handlePageChange}

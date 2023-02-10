@@ -12,9 +12,11 @@ import CharacteristicProductsAPI from "../services/CharacteristicProductsAPI";
 import {toast, ToastContainer} from "react-toastify";
 import OrderAPI from "../services/OrderAPI";
 import Pagination from "../components/Pagination/Pagination";
+import SearchForm from "../components/Form/SearchForm";
 
 function AdminProductsPage() {
     const [products, setProducts] = useState([]);
+    const [filteredProducts, setFilteredProducts] = useState([]);
     const [product, setProduct] = useState({});
     const [categories, setCategories] = useState([]);
     const [tableData, setTableData] = useState([]);
@@ -25,6 +27,7 @@ function AdminProductsPage() {
     const [selectedCategories, setSelectedCategories] = useState([]);
     const [selectedWeight, setSelectedWeight] = useState([]);
     const [selectedColor, setSelectedColor] = useState([]);
+    const [search, setSearch] = useState("");
 
     // Le code pour remplir le tableau de data
 
@@ -38,7 +41,7 @@ function AdminProductsPage() {
 
     const getDataTable = () => {
         if (products) {
-            return products.map((product, index) => (
+            return filteredProducts.map((product, index) => (
                     [
                         {value: product.id},
                         {
@@ -83,6 +86,7 @@ function AdminProductsPage() {
         try {
             const data = await ProductAPI.getAllProducts();
             setProducts(data['hydra:member']);
+            setFilteredProducts(data['hydra:member']);
             setPageList(data['hydra:view'])
         } catch (error) {
             console.error(error)
@@ -91,7 +95,7 @@ function AdminProductsPage() {
 
     const getProductData = async () => {
         try {
-            console.log('getProductData currentProductID',currentProductID)
+            console.log('getProductData currentProductID', currentProductID)
             const data = await ProductAPI.getProduct(currentProductID)
             setProduct(data)
         } catch (error) {
@@ -120,7 +124,7 @@ function AdminProductsPage() {
     }, [showModal])
 
     useEffect(() => {
-        console.log("currentProductID",currentProductID)
+        console.log("currentProductID", currentProductID)
         if (formType === "edit") {
             console.log("edit")
             getProductData().then()
@@ -130,7 +134,7 @@ function AdminProductsPage() {
 
     useEffect(() => {
         setTableData(getDataTable());
-    }, [products]);
+    }, [filteredProducts]);
 
 
     const productFields = [
@@ -406,13 +410,42 @@ function AdminProductsPage() {
         }
     }
 
+    const handleSearch = () => {
+        const orignalProducts = [...products];
+        console.log(orignalProducts)
+        if (!search.length > 3 || search.length === 0) {
+            setProducts(orignalProducts);
+            return;
+        }
+        setFilteredProducts(
+            products.filter(
+                product => product.name.toLowerCase().includes(search.toLowerCase())
+            )
+        )
+    }
+
+    useEffect(() => {
+        handleSearch()
+    }, [search])
+
     return (
         <AdminContainer title="Gestion des produits">
-            <ButtonModal
-                buttonLabel="Ajouter un produit"
-                setShowModal={setShowModal}
-                setFormType={setFormType}
-            />
+            <div className="row">
+                <div className="col-12">
+
+                    <ButtonModal
+                        buttonLabel="Ajouter un produit"
+                        setShowModal={setShowModal}
+                        setFormType={setFormType}
+                    />
+                    <SearchForm
+                        search={search}
+                        setSearch={setSearch}
+                        handleSearch={handleSearch}
+                    />
+                </div>
+            </div>
+
             <Pagination
                 pages={pageList}
                 onPageChange={handlePageChange}
