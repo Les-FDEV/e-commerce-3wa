@@ -4,6 +4,7 @@ import {
     useStripe,
     useElements
 } from "@stripe/react-stripe-js";
+import {resetCart} from "../../request/orderRequest";
 
 export default function CheckoutForm( props ) {
     const stripe = useStripe();
@@ -70,8 +71,8 @@ export default function CheckoutForm( props ) {
 
             if(paymentIntent){
 
+                await resetCart()
                 const orderForm = document.querySelector('#_orderInformations')
-
                 orderForm.submit()
 
             }

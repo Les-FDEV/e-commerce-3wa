@@ -19,7 +19,6 @@ const CartInformations = () =>{
     },[])
 
     useEffect(()=>{
-        setOrderInformations()
 
         for (const d of productsId) {
             axios.get(PRODUCT_URL + "/" + d.id)
@@ -50,13 +49,15 @@ const CartInformations = () =>{
         }
 
         setTotalPrice(res)
+        setOrderInformations()
+
 
     },[products])
 
 
     const setOrderInformations = () =>{
         const orderProductInformations = document.querySelector('#_orderProductInformations')
-        orderProductInformations.value=JSON.stringify(productsId)
+        orderProductInformations.value=JSON.stringify(products)
         console.log(orderProductInformations)
     }
 
