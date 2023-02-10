@@ -198,6 +198,9 @@ nav{
         padding: 2%;
         width: 19%;
         text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
         h3{
           font-size: 19px;
         }
@@ -266,6 +269,7 @@ nav{
 
 .skin{
   height:350px;
+
   h1{
     color: $color3;
     margin: 0;
@@ -286,19 +290,20 @@ nav{
   .product{
     width: 25%;
     text-align: center;
-    background-color: $color3;
     margin-top: 25px;
-
+    border: 2px solid lightgrey;
+    height: 350px;
   }
   h5{
     background-color: $color2;
+    border-bottom: 3px solid black;
     padding: 8px;
     font-size: 27px;
     text-transform: uppercase;
     color: white;
   }
   h6{
-    color: white;
+    color: $color3;
     padding: 5px;
     strong{
       position: relative;
@@ -318,5 +323,124 @@ nav{
     color: white;
     padding: 5px;
   }
+  a{
+    text-decoration: none;
+    background-color: black;
+    color: white;
+    padding: 8px 26px;
+    text-transform: uppercase;
+    font-weight: 500;
+    &:hover{
+      background-color: $color2;
+      color: $color3;
+    }
+  }
+}
 
+.catalog{
+  width: 80%;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  .Allproduct{
+    width: 250px;
+    margin: 15px;
+    height:400px;
+    border: 2px solid lightgrey;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    h5{
+      background-color: $color2;
+      width: 100%;
+      text-align: center;
+      font-size: 26px;
+      color: white;
+      padding: 5px;
+      border-bottom: 3px solid black;
+    }
+    h6{
+      padding: 15px;
+    }
+    a{
+      text-decoration: none;
+      background-color: black;
+      color: white;
+      padding: 2px 26px;
+      text-transform: uppercase;
+      font-weight: 500;
+      margin-top: 27px;
+      &:hover{
+        background-color: $color2;
+        color: $color3;
+      }
+    }
+    span{
+      font-weight: bold;
+      color: white;
+      margin: 3px;
+      padding: 0px 5px;
+      &:nth-child(1){
+        background-color: red;
+      }
+      &:nth-child(2){
+        background-color: green;
+      }
+      &:nth-child(3){
+        background-color: lightblue;
+      }
+      &:nth-child(4){
+        background-color: orange;
+      }
+    }
+    .categ{
+      text-align: center;
+
+      p{
+        font-weight: bold;
+        color: $color2;
+      }
+    }
+  }
+}
+
+.oneProduct{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.categsAllProdc{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 25px;
+  margin-bottom: 25px;
+  a{
+    background-color: $color3;
+    color: white;
+    text-decoration: none;
+    margin: 10px;
+    padding: 2px 10px;
+  }
+}
+.linkcenter{
+  width: 80%;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  .link{
+    background-color: $color2;
+    color: $color3;
+    font-weight: bold;
+    text-decoration: none;
+    margin: 10px;
+    padding: 2px 10px;
+    font-size: 25px;
+    margin-bottom: 51px;
+  }
 }

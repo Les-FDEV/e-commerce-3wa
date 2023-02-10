@@ -188,6 +188,9 @@ nav ul li a:hover {
   padding: 2%;
   width: 19%;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 .container .newProduct .lastest .product h3 {
   font-size: 19px;
@@ -272,18 +275,20 @@ nav ul li a:hover {
 .skin .product {
   width: 25%;
   text-align: center;
-  background-color: #15161C;
   margin-top: 25px;
+  border: 2px solid lightgrey;
+  height: 350px;
 }
 .skin h5 {
   background-color: #D11F25;
+  border-bottom: 3px solid black;
   padding: 8px;
   font-size: 27px;
   text-transform: uppercase;
   color: white;
 }
 .skin h6 {
-  color: white;
+  color: #15161C;
   padding: 5px;
 }
 .skin h6 strong {
@@ -302,6 +307,126 @@ nav ul li a:hover {
 .skin p {
   color: white;
   padding: 5px;
+}
+.skin a {
+  text-decoration: none;
+  background-color: black;
+  color: white;
+  padding: 8px 26px;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+.skin a:hover {
+  background-color: #D11F25;
+  color: #15161C;
+}
+
+.catalog {
+  width: 80%;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+}
+.catalog .Allproduct {
+  width: 250px;
+  margin: 15px;
+  height: 400px;
+  border: 2px solid lightgrey;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+.catalog .Allproduct h5 {
+  background-color: #D11F25;
+  width: 100%;
+  text-align: center;
+  font-size: 26px;
+  color: white;
+  padding: 5px;
+  border-bottom: 3px solid black;
+}
+.catalog .Allproduct h6 {
+  padding: 15px;
+}
+.catalog .Allproduct a {
+  text-decoration: none;
+  background-color: black;
+  color: white;
+  padding: 2px 26px;
+  text-transform: uppercase;
+  font-weight: 500;
+  margin-top: 27px;
+}
+.catalog .Allproduct a:hover {
+  background-color: #D11F25;
+  color: #15161C;
+}
+.catalog .Allproduct span {
+  font-weight: bold;
+  color: white;
+  margin: 3px;
+  padding: 0px 5px;
+}
+.catalog .Allproduct span:nth-child(1) {
+  background-color: red;
+}
+.catalog .Allproduct span:nth-child(2) {
+  background-color: green;
+}
+.catalog .Allproduct span:nth-child(3) {
+  background-color: lightblue;
+}
+.catalog .Allproduct span:nth-child(4) {
+  background-color: orange;
+}
+.catalog .Allproduct .categ {
+  text-align: center;
+}
+.catalog .Allproduct .categ p {
+  font-weight: bold;
+  color: #D11F25;
+}
+
+.oneProduct {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.categsAllProdc {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 25px;
+  margin-bottom: 25px;
+}
+.categsAllProdc a {
+  background-color: #15161C;
+  color: white;
+  text-decoration: none;
+  margin: 10px;
+  padding: 2px 10px;
+}
+
+.linkcenter {
+  width: 80%;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.linkcenter .link {
+  background-color: #D11F25;
+  color: #15161C;
+  font-weight: bold;
+  text-decoration: none;
+  margin: 10px;
+  padding: 2px 10px;
+  font-size: 25px;
+  margin-bottom: 51px;
 }
 
 /*# sourceMappingURL=home.css.map */

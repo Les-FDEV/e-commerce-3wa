@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Fiche produit{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/product.css') }}">
+{% endblock %}
+
+{% block body %}
+        <div class="categsAllProdc">
+            {% for cat in categs %}
+                <a href="{{ path('categsProduct', {'name' : cat.name,'id' : cat.id }) }}">{{ cat.name }}</a>
+            {% endfor %}
+        </div>
+
+        <div class="catalog">
+            {% for allProducts in allProduct %}
+                <div class="Allproduct">
+                    <h5>{{ allProducts.name }}</h5>
+                    <h6>{{ allProducts.description|slice(0, 80) ~ '...' }}</h6>
+                    {% for carac in allProducts.characteristicProducts %}
+
+                        <p>Prix : {{ carac.price }}  €</p>
+                    {% endfor %}
+                    <div class="categ">
+                        {% if allProducts.categories is not empty %}
+                            <p>Catégories</p>
+                        {% endif %}
+
+                    {% for categsProduct in allProducts.categories %}
+                       <span>{{ categsProduct.name }}</span>
+                    {% endfor %}
+                    </div>
+                    <a href="{{ path('oneProduct', {'id' : allProducts.id }) }}" >En s'avoir plus</a>
+                </div>
+            {% endfor %}
+        </div>
+
+
+{% endblock %}

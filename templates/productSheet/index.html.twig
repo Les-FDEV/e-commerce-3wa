@@ -3,14 +3,27 @@
 {% block title %}Fiche produit{% endblock %}
 
 {% block stylesheets %}
+    {{ parent() }}
     <link rel="stylesheet" href="{{ asset('css/product.css') }}">
+
 {% endblock %}
 
 {% block body %}
     <div class="container">
         <div class="oneProduct">
-            <h1>{{ oneProduct.name }}</h1>
-            <p>{{ oneProduct.description }}</p>
+
+                <h1>{{ oneProduct.name }}</h1>
+                <p>{{ oneProduct.description }}</p>
+
+                {% for productsCarac in oneProduct.characteristicProducts %}
+                    <p>Prix : {{ productsCarac.price }}</p>
+                {% endfor %}
+                <div class="categsSheet">
+                    {% for categsProduct in oneProduct.categories %}
+                        <span>{{ categsProduct.name }}</span>
+                    {% endfor %}
+                </div>
+            <div {{ react_component('AddProductInCartController', {"id":oneProduct.id}) }}></div>
         </div>
     </div>
 {% endblock %}

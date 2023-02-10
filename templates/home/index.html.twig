@@ -11,6 +11,7 @@
                 <h5></h5>
                 <h6></h6>
                 <p></p>
+                <a href=""></a>
             </div>
 
         </div>
@@ -19,6 +20,15 @@
             {% for productsRands in productsRand %}
                 <h3>{{ productsRands.name }}</h3>
                 <p>{{ productsRands.description }}</p>
+
+                {% for productsCarac in productsRands.characteristicProducts %}
+                    {{ productsCarac.price }}
+                {% endfor %}
+
+                {% for categsProduct in productsRands.categories %}
+                    <span>{{ categsProduct.name }}</span>
+                {% endfor %}
+
             {% endfor %}
         </div>
         <div class="newProduct">
@@ -27,6 +37,10 @@
                 {% for lastProducts in product %}
                     <div class="product">
                         <h3>{{ lastProducts.name }}</h3>
+                        {% for productsCarac in lastProducts.characteristicProducts %}
+                             <span>{{ productsCarac.price }}</span>
+                        {% endfor %}
+
                         <a href="{{ path('oneProduct', {'id' : lastProducts.id }) }}" >En s'avoir plus</a>
                     </div>
                 {% endfor %}
