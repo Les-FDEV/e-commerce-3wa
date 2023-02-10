@@ -1,6 +1,6 @@
 import React from 'react';
 
-function ModalAdmin({children, formType, setShowModal,}) {
+function ModalAdmin({children, formType, setShowModal, setFormType}) {
     return (
         <div className="modal fade" id="modalAdmin" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1"
              aria-labelledby="staticBackdropLabel" aria-hidden="true"
@@ -17,7 +17,7 @@ function ModalAdmin({children, formType, setShowModal,}) {
                             </h1>
                         }
 
-                        <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" ></button>
+                        <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"  onClick={() => setFormType('add')}></button>
                     </div>
                     <div className="modal-body">
                         {children}
@@ -27,7 +27,10 @@ function ModalAdmin({children, formType, setShowModal,}) {
                             type="button"
                             className="btn btn-secondary"
                             data-bs-dismiss="modal"
-                            onClick={() => setShowModal(false)}
+                            onClick={() => {
+                                setShowModal(false)
+                                setFormType('add')
+                            }}
                         >
                             Fermer
                         </button>

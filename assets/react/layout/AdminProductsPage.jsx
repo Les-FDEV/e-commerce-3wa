@@ -410,6 +410,7 @@ function AdminProductsPage() {
             />
             <ModalAdmin
                 formType={formType}
+                setFormType={setFormType}
                 setShowModal={setShowModal}
             >
                 <AdminForm

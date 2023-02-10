@@ -207,7 +207,7 @@ function AdminOrdersPage(props) {
                                             <b>Prénom</b> <span className="float-right">{order.user?.firstname}</span>
                                         </li>
                                         <li className="list-group-item">
-                                            <b>Téléphone</b> <span className="float-right">{customer.phoneNumber}</span>
+                                            <b>Téléphone</b> <span className="float-right">{order.user?.phoneNumber}</span>
                                         </li>
                                     </ul>
                                 </div>
