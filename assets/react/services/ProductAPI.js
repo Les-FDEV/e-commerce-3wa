@@ -18,8 +18,20 @@ const createProduct = (product) => {
         .catch(error => error);
 }
 
+const createProductImage = (id, product) => {
+    return axios.post(`${PRODUCT_URL}/${id}/image`, product)
+        .then(response => response)
+        .catch(error => error);
+}
+
 const updateProduct = (id, product) => {
-    return axios.put(PRODUCT_URL + "/" + id, product)
+    return axios.patch(PRODUCT_URL + "/" + id, product)
+        .then(response => response)
+        .catch(error => error);
+}
+
+const updateProductImage = (id, product) => {
+    return axios.post(`${PRODUCT_URL}/${id}/image`, product)
         .then(response => response)
         .catch(error => error);
 }
@@ -33,6 +45,8 @@ export default {
     getAllProducts,
     getProduct,
     createProduct,
+    createProductImage,
     updateProduct,
+    updateProductImage,
     deleteProduct
 }
